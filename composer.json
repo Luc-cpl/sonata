@@ -1,0 +1,37 @@
+{
+    "name": "luccpl/sonata",
+    "autoload": {
+        "psr-4": {
+            "Sonata\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Luc-cpl",
+            "email": "lucas.carvalhopl@outlook.com"
+        }
+    ],
+    "scripts": {
+        "test": "vendor/bin/pest"
+    },
+    "require": {
+        "luccpl/orkestra": "dev-release/1.1.0",
+        "doctrine/collections": "^2.2"
+    },
+    "require-dev": {
+        "doctrine/orm": "^3.1",
+        "doctrine/dbal": "^4.0",
+        "pestphp/pest": "^2.34",
+        "symfony/cache": "^7.0"
+    },
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    }
+}
