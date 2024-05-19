@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5805f6a3653192ddd316b4d85dec26cd",
+    "content-hash": "b143a993a9afa9c8dc758fd5bb2e5bf5",
     "packages": [
         {
             "name": "doctrine/collections",
@@ -549,12 +549,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Luc-cpl/orkestra.git",
-                "reference": "2298f6959bb3ac0e69c72ee4dfcb210dc0dd42e0"
+                "reference": "7c2dc6b02cf8aba55bcaec55cc1ee97a7a943ba7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Luc-cpl/orkestra/zipball/2298f6959bb3ac0e69c72ee4dfcb210dc0dd42e0",
-                "reference": "2298f6959bb3ac0e69c72ee4dfcb210dc0dd42e0",
+                "url": "https://api.github.com/repos/Luc-cpl/orkestra/zipball/7c2dc6b02cf8aba55bcaec55cc1ee97a7a943ba7",
+                "reference": "7c2dc6b02cf8aba55bcaec55cc1ee97a7a943ba7",
                 "shasum": ""
             },
             "require": {
@@ -601,7 +601,7 @@
                 "issues": "https://github.com/Luc-cpl/orkestra/issues",
                 "source": "https://github.com/Luc-cpl/orkestra/tree/release/1.1.0"
             },
-            "time": "2024-05-11T05:50:48+00:00"
+            "time": "2024-05-19T04:29:27+00:00"
         },
         {
             "name": "nikic/fast-route",
@@ -2163,16 +2163,16 @@
         },
         {
             "name": "twig/twig",
-            "version": "v3.10.1",
+            "version": "v3.10.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "3af5ab2e52279e5e23dc192b1a26db3b8cffa4e7"
+                "reference": "67f29781ffafa520b0bbfbd8384674b42db04572"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/3af5ab2e52279e5e23dc192b1a26db3b8cffa4e7",
-                "reference": "3af5ab2e52279e5e23dc192b1a26db3b8cffa4e7",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/67f29781ffafa520b0bbfbd8384674b42db04572",
+                "reference": "67f29781ffafa520b0bbfbd8384674b42db04572",
                 "shasum": ""
             },
             "require": {
@@ -2226,7 +2226,7 @@
             ],
             "support": {
                 "issues": "https://github.com/twigphp/Twig/issues",
-                "source": "https://github.com/twigphp/Twig/tree/v3.10.1"
+                "source": "https://github.com/twigphp/Twig/tree/v3.10.3"
             },
             "funding": [
                 {
@@ -2238,7 +2238,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-05-12T06:16:18+00:00"
+            "time": "2024-05-16T10:04:27+00:00"
         }
     ],
     "packages-dev": [
