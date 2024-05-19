@@ -53,7 +53,7 @@ abstract class AbstractUser extends AbstractEntity
 		}
 
 		if (password_needs_rehash($this->password, PASSWORD_DEFAULT)) {
-			$this->setPassword($password);
+			$this->set(password: $password);
 		}
 
 		return true;

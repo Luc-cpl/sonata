@@ -5,10 +5,6 @@ use Sonata\Repositories\Interfaces\UserRepositoryInterface;
 use Sonata\Testing\Doctrine;
 use Tests\Entities\DoctrineUser as User;
 
-beforeEach(function () {
-	app()->provider(HooksProvider::class);
-});
-
 it('should be able to create a user', function () {
 	$repository = app()->get(UserRepositoryInterface::class);
 
@@ -42,17 +38,23 @@ it('should be able to update a user', function () {
 	expect($foundUser->email)->toBe('test@email.com');
 });
 
-it('persists data on "http.router.response.before" hook', function () {
-	$repository = app()->get(UserRepositoryInterface::class);
-	$user = factory()->make(User::class);
+describe('listeners', function () {
+	beforeEach(function () {
+		app()->provider(HooksProvider::class);
+	});
 
-	$repository->add($user);
+	it('persists data on "http.router.response.before" hook', function () {
+		$repository = app()->get(UserRepositoryInterface::class);
+		$user = factory()->make(User::class);
 
-	expect(isset($user->id))->toBeFalse();
+		$repository->add($user);
 
-	app()->hookCall('http.router.response.before');
+		expect(isset($user->id))->toBeFalse();
 
-	expect(isset($user->id))->toBeTrue();
+		app()->hookCall('http.router.response.before');
+
+		expect(isset($user->id))->toBeTrue();
+	});
 });
 
 it('should be able to delete a user', function () {
@@ -127,4 +129,48 @@ it('should be able to search for a user by email', function () {
 
 	expect(count($foundUsers))->toBe(count($usersEmails));
 	expect($foundUsersEmail)->toBe($usersEmails);
+});
+
+it('should be able to paginate users', function () {
+	$users = Doctrine::factory(User::class, 10);
+
+	$repository = app()->get(UserRepositoryInterface::class);
+	$foundUsers = $repository->slice(0, 5)->all();
+
+	expect(count($foundUsers))->toBe(5);
+
+	$usersEmails = array_map(fn ($user) => $user->email, $users);
+	$usersEmails = array_slice($usersEmails, 0, 5);
+
+	$foundUsersEmail = $foundUsers->map(fn ($user) => $user->email)->toArray();
+
+	sort($usersEmails);
+	sort($foundUsersEmail);
+
+	expect($foundUsersEmail)->toBe($usersEmails);
+});
+
+it('should be able to count users', function () {
+	Doctrine::factory(User::class, 10);
+	$repository = app()->get(UserRepositoryInterface::class);
+
+	$count = $repository->count();
+	expect($count)->toBe(10);
+});
+
+it('should be able slice and count users', function () {
+	Doctrine::factory(User::class, 10);
+	$repository = app()->get(UserRepositoryInterface::class);
+
+	$count = count($repository->slice(0, 5)->all());
+	expect($count)->toBe(5);
+
+	$count = count($repository->slice(8, 5)->all());
+	expect($count)->toBe(2);
+
+	$count = $repository->slice(0, 5)->count();
+	expect($count)->toBe(5);
+
+	$count = $repository->slice(8, 5)->count();
+	expect($count)->toBe(2);
 });

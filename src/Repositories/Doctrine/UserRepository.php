@@ -8,6 +8,7 @@ use Sonata\Repositories\Interfaces\UserRepositoryInterface;
 use Sonata\Entities\Abstracts\AbstractUser;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\QueryBuilder;
 
 class UserRepository implements UserRepositoryInterface
@@ -35,7 +36,13 @@ class UserRepository implements UserRepositoryInterface
 
 	public function count(): int
 	{
-		return $this->builder->getQuery()->getSingleScalarResult();
+		$clone = clone $this;
+		if ($this->builder->getMaxResults()) {
+			$clone->builder->select('u.id');
+			return count($clone->builder->getQuery()->getResult(AbstractQuery::HYDRATE_ARRAY));
+		}
+		$clone->builder->select('count(u.id)');
+		return $clone->builder->getQuery()->getSingleScalarResult();
 	}
 
 	public function whereId(int|string|array $id): self

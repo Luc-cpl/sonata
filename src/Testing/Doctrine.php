@@ -4,7 +4,6 @@ namespace Sonata\Testing;
 
 use Doctrine\DBAL\LockMode;
 use Doctrine\ORM\EntityManagerInterface;
-use Orkestra\Entities\EntityFactory;
 
 class Doctrine
 {
