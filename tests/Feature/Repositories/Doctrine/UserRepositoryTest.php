@@ -1,9 +1,14 @@
 <?php
 
 use Orkestra\Providers\HooksProvider;
-use Sonata\Repositories\Interfaces\UserRepositoryInterface;
+use Sonata\Interfaces\UserRepositoryInterface;
 use Sonata\Testing\Doctrine;
 use Tests\Entities\DoctrineUser as User;
+
+
+beforeEach(function () {
+	doctrineTest();
+});
 
 it('should be able to create a user', function () {
 	$repository = app()->get(UserRepositoryInterface::class);

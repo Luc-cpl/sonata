@@ -1,6 +1,6 @@
 <?php
 
-namespace Sonata\Repositories\Interfaces;
+namespace Sonata\Interfaces;
 
 use Doctrine\Common\Collections\Collection;
 use Sonata\Entities\Abstracts\AbstractUser;

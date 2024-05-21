@@ -15,9 +15,9 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\ORMSetup;
 use Sonata\Repositories\Doctrine\UserRepository;
-use Sonata\Repositories\Interfaces\UserRepositoryInterface;
+use Sonata\Interfaces\UserRepositoryInterface;
 
-class DoctrineProvider extends AbstractProvider
+class DoctrineProvider extends AbstractDatabaseProvider
 {
 	public array $listeners = [
 		FlushDoctrineData::class,
@@ -28,15 +28,15 @@ class DoctrineProvider extends AbstractProvider
 		parent::register($app);
 
 		$app->config()->set('validation', [
-			'doctrine.entities' => fn ($value) => is_array($value) ? true : 'The entities config must be an array',
+			'doctrine.entities'   => fn ($value) => is_array($value) ? true : 'The entities config must be an array',
 			'doctrine.connection' => fn ($value) => is_array($value) ? true : 'The connection config must be an array',
 		]);
 
 		$app->config()->set('definition', [
-			'doctrine.entities' => ['Doctrine entities directory (defaults to [app/Entities])', fn () => [$app->config()->get('root') . '/app/Entities']],
+			'doctrine.entities'   => ['Doctrine entities directory (defaults to [app/Entities])', fn () => [$app->config()->get('root') . '/app/Entities']],
 			'doctrine.connection' => ['Doctrine configuration (defaults to sqlite)', fn () => [
 				'driver' => 'pdo_sqlite',
-				'path' => $app->config()->get('root') . '/db.sqlite',
+				'path'   => $app->config()->get('root') . '/db.sqlite',
 			]],
 		]);
 

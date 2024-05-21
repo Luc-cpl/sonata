@@ -4,9 +4,33 @@ namespace Sonata\Testing;
 
 use Doctrine\DBAL\LockMode;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Tools\SchemaTool;
+use Sonata\Providers\DoctrineProvider;
 
 class Doctrine
 {
+	/**
+	 * Initialize the Doctrine provider for testing.
+	 * It will use an in-memory SQLite database and create the schema from entities.
+	 * This will not use existing migrations.
+	 */
+	public static function init(): void
+	{
+		app()->provider(DoctrineProvider::class);
+		app()->config()->set('doctrine.connection', fn () => [
+			'driver' => 'pdo_sqlite',
+			'memory' => true,
+		]);
+
+		// Generate the schema directly from entities
+		app()->decorate(EntityManagerInterface::class, function (EntityManagerInterface $entityManager) {
+			$schemaTool = new SchemaTool($entityManager);
+			$metadata   = $entityManager->getMetadataFactory()->getAllMetadata();
+			$schemaTool->createSchema($metadata);
+			return $entityManager;
+		});
+	}
+
 	/**
      * @template T of object
      * @param class-string<T> $className

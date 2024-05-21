@@ -1,9 +1,9 @@
 <?php
 
 use Sonata\Entities\Abstracts\AbstractUser;
-use Sonata\Providers\AbstractProvider;
+use Sonata\Providers\AbstractDatabaseProvider;
 
-class Provider extends AbstractProvider
+class Provider extends AbstractDatabaseProvider
 {}
 
 it('should validate sonata.user_entity', function () {

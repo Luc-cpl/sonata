@@ -6,7 +6,7 @@ use Orkestra\App;
 use Orkestra\Interfaces\ProviderInterface;
 use Sonata\Entities\Abstracts\AbstractUser;
 
-abstract class AbstractProvider implements ProviderInterface
+abstract class AbstractDatabaseProvider implements ProviderInterface
 {
 	public function register(App $app): void
 	{
@@ -20,7 +20,7 @@ abstract class AbstractProvider implements ProviderInterface
 		]);
 
 		$app->config()->set('definition', [
-			'sonata.user_entity' => ['User entity class (defaults to App\Entities\User)', fn () => 'App\Entities\User'],
+			'sonata.user_entity' => ['User entity class (defaults to App\Entities\User)', 'App\Entities\User'],
 		]);
 	}
 

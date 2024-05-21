@@ -4,7 +4,7 @@ namespace Sonata\Repositories\Doctrine;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Sonata\Repositories\Interfaces\UserRepositoryInterface;
+use Sonata\Interfaces\UserRepositoryInterface;
 use Sonata\Entities\Abstracts\AbstractUser;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;

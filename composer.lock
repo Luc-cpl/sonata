@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b143a993a9afa9c8dc758fd5bb2e5bf5",
+    "content-hash": "5805f6a3653192ddd316b4d85dec26cd",
     "packages": [
         {
             "name": "doctrine/collections",
@@ -549,12 +549,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Luc-cpl/orkestra.git",
-                "reference": "7c2dc6b02cf8aba55bcaec55cc1ee97a7a943ba7"
+                "reference": "25cb9189a69f89cc39504c970b976b06d272a1d7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Luc-cpl/orkestra/zipball/7c2dc6b02cf8aba55bcaec55cc1ee97a7a943ba7",
-                "reference": "7c2dc6b02cf8aba55bcaec55cc1ee97a7a943ba7",
+                "url": "https://api.github.com/repos/Luc-cpl/orkestra/zipball/25cb9189a69f89cc39504c970b976b06d272a1d7",
+                "reference": "25cb9189a69f89cc39504c970b976b06d272a1d7",
                 "shasum": ""
             },
             "require": {
@@ -601,7 +601,7 @@
                 "issues": "https://github.com/Luc-cpl/orkestra/issues",
                 "source": "https://github.com/Luc-cpl/orkestra/tree/release/1.1.0"
             },
-            "time": "2024-05-19T04:29:27+00:00"
+            "time": "2024-05-21T04:01:31+00:00"
         },
         {
             "name": "nikic/fast-route",
