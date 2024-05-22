@@ -19,7 +19,9 @@ class SessionProvider implements ProviderInterface
 	public function register(App $app): void
 	{
 		$app->config()->set('validation', [
-			'sonata.auth_guards' => function ($value) {
+			'sonata.default_guard' => fn ($value) => is_string($value) ? true : 'The default guard key must be a string',
+			'sonata.session'       => fn ($value) => class_exists($value) ? true : 'The session implementation must be a valid class',
+			'sonata.auth_guards'   => function ($value) {
 				if (!is_array($value)) {
 					return 'The auth guards config must be an array';
 				}

@@ -4,7 +4,7 @@ use Sonata\Entities\Abstracts\AbstractUser;
 
 class User extends AbstractUser
 {
-	public function forceOldHashPassword(string $password): void
+	public function forceWeekHashPassword(string $password): void
 	{
 		$this->password = password_hash($password, PASSWORD_DEFAULT, ['cost' => 9]);
 	}
@@ -28,7 +28,7 @@ it('should be able to set a password', function () {
 
 it('should rehash the password when the password is updated', function () {
 	$user = new User;
-	$user->forceOldHashPassword('password');
+	$user->forceWeekHashPassword('password');
 
 	$initial = $user->password;
 	$user->verifyPassword('password'); // Trigger rehash

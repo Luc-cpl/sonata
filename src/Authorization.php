@@ -17,13 +17,16 @@ class Authorization implements AuthInterface
 	 */
 	private array $instances = [];
 
+	private string $defaultGuard;
+
 	private string $currentGuard;
 
 	public function __construct(
 		private ConfigurationInterface $config,
 		private AppContainerInterface $app
 	) {
-		$this->currentGuard = $this->config->get('sonata.default_guard');
+		$this->defaultGuard = $this->config->get('sonata.default_guard');
+		$this->currentGuard = $this->defaultGuard;
 	}
 
 	/**
@@ -31,8 +34,9 @@ class Authorization implements AuthInterface
 	 * Usually this method should be called by a middleware to retrieve the
 	 * guard instance for the current request.
 	 */
-	public function guard(string $guard): AuthDriverInterface
+	public function guard(?string $guard = null): AuthDriverInterface
 	{
+		$guard ??= $this->defaultGuard;
 		$this->currentGuard = $guard;
 
 		if (array_key_exists($guard, $this->instances)) {
@@ -69,7 +73,7 @@ class Authorization implements AuthInterface
 		return $driver;
 	}
 
-	public function user(): AbstractUser
+	public function user(): ?AbstractUser
 	{
 		return $this->guard($this->currentGuard)->user();
 	}
