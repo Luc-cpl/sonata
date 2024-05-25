@@ -2,11 +2,10 @@
 
 namespace Tests\Entities;
 
-use Sonata\Entities\Abstracts\AbstractUser;
+use Sonata\Doctrine\Entities\Abstracts\AbstractUser;
+use Sonata\Doctrine\Entities\Partials\HasCreatedAt;
+use Sonata\Doctrine\Entities\Partials\HasUpdatedAt;
 use Doctrine\ORM\Mapping as Doctrine;
-use Orkestra\Entities\Attributes\Faker;
-use Sonata\Entities\Partials\HasCreatedAt;
-use Sonata\Entities\Partials\HasUpdatedAt;
 
 #[Doctrine\Entity]
 #[Doctrine\Table(name: 'users')]

@@ -2,7 +2,9 @@
     "name": "luccpl/sonata",
     "autoload": {
         "psr-4": {
-            "Sonata\\": "src/"
+            "Sonata\\": "modules/core",
+            "Sonata\\Testing\\": "modules/testing",
+            "Sonata\\Doctrine\\": "modules/doctrine"
         }
     },
     "autoload-dev": {
@@ -21,8 +23,7 @@
         "pest:coverage": "XDEBUG_MODE=coverage ./vendor/bin/pest --coverage --coverage-html=coverage"
     },
     "require": {
-        "luccpl/orkestra": "dev-release/1.1.0",
-        "doctrine/collections": "^2.2"
+        "luccpl/orkestra": "dev-release/1.1.0"
     },
     "require-dev": {
         "doctrine/orm": "^3.1",
