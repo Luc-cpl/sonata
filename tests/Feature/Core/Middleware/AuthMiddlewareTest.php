@@ -11,6 +11,17 @@ use Tests\Entities\DoctrineUser;
 
 beforeEach(function () {
 	app()->provider(SessionProvider::class);
+	app()->config()->set('sonata.default_guard', 'web');
+	app()->config()->set('sonata.auth_guards', [
+		'web' => [
+			'driver'     => SessionDriver::class,
+			'repository' => UserRepositoryInterface::class,
+		],
+		'web2' => [
+			'driver'     => SessionDriver::class,
+			'repository' => UserRepositoryInterface::class,
+		],
+	]);
 	doctrineTest();
 });
 
@@ -33,17 +44,6 @@ it('should throw an exception for a guest user', function () {
 })->expectException(UnauthorizedException::class);
 
 it('should allow the access for a logged in user with a specific guard', function () {
-	app()->config()->set('sonata.auth_guards', [
-		'web' => [
-			'driver'     => SessionDriver::class,
-			'repository' => UserRepositoryInterface::class,
-		],
-		'web2' => [
-			'driver'     => SessionDriver::class,
-			'repository' => UserRepositoryInterface::class,
-		],
-	]);
-
 	$user = Doctrine::factory(DoctrineUser::class)[0];
 	Auth::actingAs($user, 'web2');
 

@@ -1,11 +1,20 @@
 <?php
 
 use Orkestra\Providers\HooksProvider;
+use Sonata\AuthDrivers\SessionDriver;
 use Sonata\Interfaces\SessionInterface;
+use Sonata\Interfaces\UserRepositoryInterface;
 use Sonata\Providers\SessionProvider;
 
 beforeEach(function () {
 	app()->provider(SessionProvider::class);
+	app()->config()->set('sonata.default_guard', 'web');
+	app()->config()->set('sonata.auth_guards', [
+		'web' => [
+			'driver'     => SessionDriver::class,
+			'repository' => UserRepositoryInterface::class,
+		],
+	]);
 });
 
 it('should auto start a session when retrieve from interface', function () {

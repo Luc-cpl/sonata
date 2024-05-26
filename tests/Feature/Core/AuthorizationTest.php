@@ -17,12 +17,12 @@ beforeEach(function () {
 	 */
 	doctrineTest();
 	app()->provider(SessionProvider::class);
+	app()->config()->set('sonata.default_guard', 'web');
 	app()->config()->set('sonata.auth_guards', [
 		'web' => [
 			'driver'     => SessionDriver::class,
 			'repository' => UserRepositoryInterface::class,
 		],
-		// Check if we can have multiple guards with same driver
 		'web2' => [
 			'driver'     => SessionDriver::class,
 			'repository' => UserRepositoryInterface::class,

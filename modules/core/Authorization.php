@@ -54,15 +54,9 @@ class Authorization implements AuthInterface
 
 		/** @var AuthDriverInterface */
 		$driver = $this->app->make($driver);
-		if (!is_subclass_of($driver, AuthDriverInterface::class)) {
-			throw new InvalidArgumentException("The guard driver must implement " . AuthDriverInterface::class);
-		}
 
 		/** @var RepositoryInterface */
 		$repository = $this->app->get($repository);
-		if (!is_subclass_of($repository, RepositoryInterface::class)) {
-			throw new InvalidArgumentException("The guard repository must implement " . RepositoryInterface::class);
-		}
 
 		$driver->setRepository($repository);
 		$driver->setGuard($guardKey);

@@ -4,9 +4,9 @@ namespace Sonata\Providers;
 
 use Orkestra\App;
 use Orkestra\Interfaces\ProviderInterface;
-use Sonata\AuthDrivers\SessionDriver;
+use Sonata\Interfaces\AuthDriverInterface;
+use Sonata\Interfaces\RepositoryInterface;
 use Sonata\Interfaces\SessionInterface;
-use Sonata\Interfaces\UserRepositoryInterface;
 use Sonata\Listeners\SessionCommit;
 use Sonata\Sessions\PHPSession;
 
@@ -29,6 +29,12 @@ class SessionProvider implements ProviderInterface
 					if (!is_array($config) || !array_key_exists('driver', $config) || !array_key_exists('repository', $config)) {
 						return 'The auth guard config must be an array with keys "driver" and "repository"';
 					}
+					if (!is_subclass_of($config['driver'], AuthDriverInterface::class)) {
+						return 'The guard driver must implement ' . AuthDriverInterface::class;
+					}
+					if (!is_subclass_of($config['repository'], RepositoryInterface::class)) {
+						return 'The guard repository must implement ' . RepositoryInterface::class;
+					}
 				}
 				return true;
 			},
@@ -37,16 +43,10 @@ class SessionProvider implements ProviderInterface
 		$phpSession = PHPSession::class;
 		$app->config()->set('definition', [
 			'sonata.session'       => ["Session implementation (defaults to $phpSession)", $phpSession],
-			'sonata.default_guard' => ['Default guard key (defaults to "web")', 'web'],
-			'sonata.auth_guards'   => ['Auth guards', [
-				'web' => [
-					'driver'     => SessionDriver::class,
-					'repository' => UserRepositoryInterface::class,
-				],
-			]],
+			'sonata.default_guard' => ['Default guard key'],
+			'sonata.auth_guards'   => ['Auth guards'],
 		]);
 
-		$app->bind(SessionInterface::class, fn () => $app->get($app->config()->get('sonata.session')));
 		$app->bind(SessionInterface::class, function () use ($app) {
 			/** @var SessionInterface */
 			$session = $app->get($app->config()->get('sonata.session'));
