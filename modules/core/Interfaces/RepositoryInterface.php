@@ -21,4 +21,8 @@ interface RepositoryInterface extends IteratorAggregate, Countable
 	 * @return $this
 	 */
 	public function slice(int $offset, int $limit): self;
+
+	public function persist(object $entity): void;
+
+	public function remove(object $entity): void;
 }

@@ -14,7 +14,7 @@ it('should be able to create a user', function () {
 	$repository = app()->get(UserRepositoryInterface::class);
 
 	$user = factory()->make(User::class,  password: 'password');
-	$repository->add($user);
+	$repository->persist($user);
 	Doctrine::flush();
 
 	expect($user->password)->not->toBe('password');
@@ -52,7 +52,7 @@ describe('listeners', function () {
 		$repository = app()->get(UserRepositoryInterface::class);
 		$user = factory()->make(User::class);
 
-		$repository->add($user);
+		$repository->persist($user);
 
 		expect(isset($user->id))->toBeFalse();
 
