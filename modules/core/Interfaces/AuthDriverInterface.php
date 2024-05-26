@@ -12,5 +12,5 @@ interface AuthDriverInterface extends AuthInterface
 	/**
 	 * Sets the user repository to be used by the driver.
 	 */
-	public function setRepository(UserRepositoryInterface $repository): void;
+	public function setRepository(RepositoryInterface $repository): void;
 }

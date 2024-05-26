@@ -31,12 +31,12 @@ class Auth
 	}
 
 	/**
-	 * Logout all the guards used in the tests.
+	 * revoke all authentication guards used in the tests.
 	 */
 	public static function clear(): void
 	{
 		foreach (self::$usedGuards as $guard) {
-			self::guard($guard)->logout();
+			self::guard($guard)->revoke();
 		}
 		self::$usedGuards = [];
 	}

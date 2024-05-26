@@ -4,7 +4,7 @@ namespace Sonata;
 
 use Orkestra\Interfaces\ConfigurationInterface;
 use Sonata\Interfaces\AuthDriverInterface;
-use Sonata\Interfaces\UserRepositoryInterface;
+use Sonata\Interfaces\RepositoryInterface;
 use Orkestra\Interfaces\AppContainerInterface;
 use Sonata\Interfaces\AuthInterface;
 use InvalidArgumentException;
@@ -58,10 +58,10 @@ class Authorization implements AuthInterface
 			throw new InvalidArgumentException("The guard driver must implement " . AuthDriverInterface::class);
 		}
 
-		/** @var UserRepositoryInterface */
+		/** @var RepositoryInterface */
 		$repository = $this->app->get($repository);
-		if (!is_subclass_of($repository, UserRepositoryInterface::class)) {
-			throw new InvalidArgumentException("The guard repository must implement " . UserRepositoryInterface::class);
+		if (!is_subclass_of($repository, RepositoryInterface::class)) {
+			throw new InvalidArgumentException("The guard repository must implement " . RepositoryInterface::class);
 		}
 
 		$driver->setRepository($repository);
@@ -72,9 +72,9 @@ class Authorization implements AuthInterface
 		return $driver;
 	}
 
-	public function user(): ?object
+	public function subject(): ?object
 	{
-		return $this->guard($this->currentGuard)->user();
+		return $this->guard($this->currentGuard)->subject();
 	}
 
 	public function check(): bool
@@ -82,13 +82,13 @@ class Authorization implements AuthInterface
 		return $this->guard($this->currentGuard)->check();
 	}
 
-	public function authenticate(object $user): void
+	public function authenticate(object $subject): void
 	{
-		$this->guard($this->currentGuard)->authenticate($user);
+		$this->guard($this->currentGuard)->authenticate($subject);
 	}
 
-	public function logout(): void
+	public function revoke(): void
 	{
-		$this->guard($this->currentGuard)->logout();
+		$this->guard($this->currentGuard)->revoke();
 	}
 }

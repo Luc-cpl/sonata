@@ -31,5 +31,5 @@ uses(AbstractTestCase::class)->in(__DIR__);
 function doctrineTest() {
 	Doctrine::init();
 	app()->config()->set('sonata.user_entity', DoctrineUser::class);
-	app()->config()->set('doctrine.entities', fn () => [app()->config()->get('root') . '/tests/Entities']);
+	app()->config()->set('doctrine.entities', fn () => [DoctrineUser::class]);
 }

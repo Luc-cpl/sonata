@@ -17,6 +17,7 @@ use Doctrine\ORM\ORMSetup;
 use Sonata\Doctrine\Repositories\UserRepository;
 use Sonata\Interfaces\UserRepositoryInterface;
 use Sonata\Providers\AbstractDatabaseProvider;
+use ReflectionClass;
 
 class DoctrineProvider extends AbstractDatabaseProvider
 {
@@ -53,10 +54,11 @@ class DoctrineProvider extends AbstractDatabaseProvider
 			/** @var string[] */
 			$entitiesPaths = $app->config()->get('doctrine.entities');
 
-			/** @var class-string */
-			$userEntity = $app->config()->get('sonata.user_entity');
-
-			$entitiesPaths[] = dirname((new \ReflectionClass($userEntity))->getFileName());
+			foreach ($entitiesPaths as &$path) {
+				if (class_exists($path)) {
+					$path = dirname((new ReflectionClass($path))->getFileName());
+				}
+			}
 
 			/** @var array<string, mixed> */
 			$connectionConfig = $app->config()->get('doctrine.connection');

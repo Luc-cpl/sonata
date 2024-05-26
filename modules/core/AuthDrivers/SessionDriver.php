@@ -3,16 +3,16 @@
 namespace Sonata\AuthDrivers;
 
 use Sonata\Interfaces\AuthDriverInterface;
-use Sonata\Interfaces\UserRepositoryInterface;
+use Sonata\Interfaces\RepositoryInterface;
 use Sonata\Interfaces\SessionInterface;
 
 class SessionDriver implements AuthDriverInterface
 {
-	protected UserRepositoryInterface $repository;
+	protected RepositoryInterface $repository;
 
 	protected string $guard;
 
-	protected ?object $user = null;
+	protected ?object $subject = null;
 
 	public function __construct(
 		protected SessionInterface $session
@@ -25,43 +25,43 @@ class SessionDriver implements AuthDriverInterface
 		$this->guard = $guard;
 	}
 
-	public function setRepository(UserRepositoryInterface $repository): void
+	public function setRepository(RepositoryInterface $repository): void
 	{
 		$this->repository = $repository;
 	}
 
-	public function authenticate(object $user)
+	public function authenticate(object $subject)
 	{
-		$this->user = $user;
-		$this->session->set($this->guardKey(), $user->id);
+		$this->subject = $subject;
+		$this->session->set($this->guardKey(), $subject->id);
 	}
 
 	public function check(): bool
 	{
 		/**
-		 * As in most cases we will use the user() method in the request cycle,
-		 * we can just check if the user() method returns null or not instead of
-		 * checking the database for the user existence.
+		 * As in most cases we will use the subject() method in the request cycle,
+		 * we can just check if the subject() method returns null or not instead of
+		 * checking the database for the subject existence.
 		 */
-		return $this->user() !== null;
+		return $this->subject() !== null;
 	}
 
-	public function user(): ?object
+	public function subject(): ?object
 	{
 		if (!$this->session->has($this->guardKey())) {
 			return null;
 		}
-		$this->user ??= $this->repository->whereId($this->session->get($this->guardKey()))->first();
-		return $this->user;
+		$this->subject ??= $this->repository->whereId($this->session->get($this->guardKey()))->first();
+		return $this->subject;
 	}
 
-	public function logout(): void
+	public function revoke(): void
 	{
 		$this->session->remove($this->guardKey());
 	}
 
 	protected function guardKey(): string
 	{
-		return "guards.{$this->guard}.user";
+		return "guards.{$this->guard}.subject";
 	}
 }
