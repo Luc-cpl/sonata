@@ -1,8 +1,11 @@
 <?php
 
+use Doctrine\ORM\EntityManagerInterface;
 use Orkestra\Testing\AbstractTestCase;
+use Sonata\Doctrine\Repositories\AbstractRepository;
+use Sonata\Interfaces\RepositoryInterface;
 use Sonata\Testing\Doctrine;
-use Tests\Entities\DoctrineUser;
+use Tests\Entities\DoctrineSubject;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,6 +33,13 @@ uses(AbstractTestCase::class)->in(__DIR__);
 
 function doctrineTest() {
 	Doctrine::init();
-	app()->config()->set('sonata.user_entity', DoctrineUser::class);
-	app()->config()->set('doctrine.entities', fn () => [app()->config()->get('root') . '/tests/Entities']);
+	app()->config()->set('doctrine.entities', fn () => [DoctrineSubject::class]);
+	app()->bind(RepositoryInterface::class, function (EntityManagerInterface $manager) {
+		return new class($manager) extends AbstractRepository
+		{
+			public function __construct(EntityManagerInterface $manager) {
+				parent::__construct($manager, DoctrineSubject::class);
+			}
+		};
+	});
 }
