@@ -8,23 +8,23 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class FlushDoctrineData implements ListenerInterface
 {
-	public function __construct(
-		private App $app
-	) {
-		//	
-	}
+    public function __construct(
+        private App $app
+    ) {
+        //
+    }
 
-	/**
+    /**
      * @return string|string[]
      */
     public function hook(): string|array
-	{
-		return '{app}.http.router.response.before';
-	}
+    {
+        return '{app}.http.router.response.before';
+    }
 
-	public function handle()
-	{
-		$entityManager = $this->app->get(EntityManagerInterface::class);
-		$entityManager->flush();
-	}
+    public function handle()
+    {
+        $entityManager = $this->app->get(EntityManagerInterface::class);
+        $entityManager->flush();
+    }
 }

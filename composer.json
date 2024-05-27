@@ -20,7 +20,8 @@
     ],
     "scripts": {
         "pest": "vendor/bin/pest",
-        "pest:coverage": "XDEBUG_MODE=coverage ./vendor/bin/pest --coverage --coverage-html=coverage"
+        "pest:coverage": "XDEBUG_MODE=coverage ./vendor/bin/pest --coverage --coverage-html=coverage",
+        "pint": "./vendor/bin/pint"
     },
     "require": {
         "luccpl/orkestra": "dev-release/1.1.0"
@@ -29,7 +30,8 @@
         "doctrine/orm": "^3.1",
         "doctrine/dbal": "^4.0",
         "pestphp/pest": "^2.34",
-        "symfony/cache": "^7.0"
+        "symfony/cache": "^7.0",
+        "laravel/pint": "^1.16"
     },
     "config": {
         "allow-plugins": {

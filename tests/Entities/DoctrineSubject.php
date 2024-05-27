@@ -14,16 +14,16 @@ use Orkestra\Entities\Attributes\Faker;
 #[Doctrine\Table(name: 'subjects')]
 class DoctrineSubject extends AbstractEntity
 {
-	#[Doctrine\Id]
-	#[Doctrine\GeneratedValue(strategy: 'AUTO')]
-	#[Doctrine\Column(type: 'integer')]
-	protected ?int $id;
+    #[Doctrine\Id]
+    #[Doctrine\GeneratedValue(strategy: 'AUTO')]
+    #[Doctrine\Column(type: 'integer')]
+    protected ?int $id;
 
-	public function __construct(
-		#[Doctrine\Column(type: 'string')]
-		#[Faker(method: 'word')]
-		protected string $value)
-	{
-		//
-	}
+    public function __construct(
+        #[Doctrine\Column(type: 'string')]
+        #[Faker(method: 'word')]
+        protected string $value
+    ) {
+        //
+    }
 }

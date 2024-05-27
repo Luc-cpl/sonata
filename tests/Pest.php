@@ -31,15 +31,16 @@ uses(AbstractTestCase::class)->in(__DIR__);
 |
 */
 
-function doctrineTest() {
-	Doctrine::init();
-	app()->config()->set('doctrine.entities', fn () => [DoctrineSubject::class]);
-	app()->bind(RepositoryInterface::class, function (EntityManagerInterface $manager) {
-		return new class($manager) extends AbstractRepository
-		{
-			public function __construct(EntityManagerInterface $manager) {
-				parent::__construct($manager, DoctrineSubject::class);
-			}
-		};
-	});
+function doctrineTest()
+{
+    Doctrine::init();
+    app()->config()->set('doctrine.entities', fn () => [DoctrineSubject::class]);
+    app()->bind(RepositoryInterface::class, function (EntityManagerInterface $manager) {
+        return new class ($manager) extends AbstractRepository {
+            public function __construct(EntityManagerInterface $manager)
+            {
+                parent::__construct($manager, DoctrineSubject::class);
+            }
+        };
+    });
 }

@@ -11,23 +11,23 @@ use Sonata\Authorization;
 
 class AuthorizationMiddleware extends AbstractMiddleware
 {
-	public function __construct(
-		private ?string $guard = null,
-	) {
-		//
-	}
+    public function __construct(
+        private ?string $guard = null,
+    ) {
+        //
+    }
 
-	public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
-	{
-		$auth = $this->app->get(Authorization::class);
-		if ($this->guard !== null) {
-			$auth = $auth->guard($this->guard);
-		}
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
+    {
+        $auth = $this->app->get(Authorization::class);
+        if ($this->guard !== null) {
+            $auth = $auth->guard($this->guard);
+        }
 
-		if (!$auth->check()) {
-			throw new UnauthorizedException();
-		}
+        if (!$auth->check()) {
+            throw new UnauthorizedException();
+        }
 
-		return $handler->handle($request);
-	}
+        return $handler->handle($request);
+    }
 }

@@ -19,62 +19,62 @@ use ReflectionClass;
 
 class DoctrineProvider implements ProviderInterface
 {
-	public array $listeners = [
-		FlushDoctrineData::class,
-	];
+    public array $listeners = [
+        FlushDoctrineData::class,
+    ];
 
-	public function register(App $app): void
-	{
-		$app->config()->set('validation', [
-			'doctrine.entities'   => fn ($value) => is_array($value) ? true : 'The entities config must be an array',
-			'doctrine.connection' => fn ($value) => is_array($value) ? true : 'The connection config must be an array',
-		]);
+    public function register(App $app): void
+    {
+        $app->config()->set('validation', [
+            'doctrine.entities'   => fn ($value) => is_array($value) ? true : 'The entities config must be an array',
+            'doctrine.connection' => fn ($value) => is_array($value) ? true : 'The connection config must be an array',
+        ]);
 
-		$app->config()->set('definition', [
-			'doctrine.entities'   => ['Doctrine entities directory (defaults to [app/Entities])', fn () => [$app->config()->get('root') . '/app/Entities']],
-			'doctrine.connection' => ['Doctrine configuration (defaults to sqlite)', fn () => [
-				'driver' => 'pdo_sqlite',
-				'path'   => $app->config()->get('root') . '/db.sqlite',
-			]],
-		]);
+        $app->config()->set('definition', [
+            'doctrine.entities'   => ['Doctrine entities directory (defaults to [app/Entities])', fn () => [$app->config()->get('root') . '/app/Entities']],
+            'doctrine.connection' => ['Doctrine configuration (defaults to sqlite)', fn () => [
+                'driver' => 'pdo_sqlite',
+                'path'   => $app->config()->get('root') . '/db.sqlite',
+            ]],
+        ]);
 
-		$app->decorate(Application::class, function ($cli) use ($app) {
-			$app->call(ConsoleRunner::class . '::addCommands', [$cli]);
-			return $cli;
-		});
+        $app->decorate(Application::class, function ($cli) use ($app) {
+            $app->call(ConsoleRunner::class . '::addCommands', [$cli]);
+            return $cli;
+        });
 
-		$app->bind(EntityManagerInterface::class, function () use ($app) {
-			/** @var string */
-			$env = $app->config()->get('env');
+        $app->bind(EntityManagerInterface::class, function () use ($app) {
+            /** @var string */
+            $env = $app->config()->get('env');
 
-			/** @var string[] */
-			$entitiesPaths = $app->config()->get('doctrine.entities');
+            /** @var string[] */
+            $entitiesPaths = $app->config()->get('doctrine.entities');
 
-			foreach ($entitiesPaths as &$path) {
-				if (class_exists($path)) {
-					$path = dirname((new ReflectionClass($path))->getFileName());
-				}
-			}
+            foreach ($entitiesPaths as &$path) {
+                if (class_exists($path)) {
+                    $path = dirname((new ReflectionClass($path))->getFileName());
+                }
+            }
 
-			/** @var array<string, mixed> */
-			$connectionConfig = $app->config()->get('doctrine.connection');
+            /** @var array<string, mixed> */
+            $connectionConfig = $app->config()->get('doctrine.connection');
 
-			$config = ORMSetup::createAttributeMetadataConfiguration(
-				paths: $entitiesPaths,
-				isDevMode: $env === 'development',
-			);
+            $config = ORMSetup::createAttributeMetadataConfiguration(
+                paths: $entitiesPaths,
+                isDevMode: $env === 'development',
+            );
 
-			$connection = DriverManager::getConnection($connectionConfig, $config);
+            $connection = DriverManager::getConnection($connectionConfig, $config);
 
-			return new EntityManager($connection, $config);
-		});
+            return new EntityManager($connection, $config);
+        });
 
-		$app->bind(EntityManagerProvider::class, SingleManagerProvider::class);
-		$app->bind(ConnectionProvider::class, ConnectionFromManagerProvider::class);
-	}
+        $app->bind(EntityManagerProvider::class, SingleManagerProvider::class);
+        $app->bind(ConnectionProvider::class, ConnectionFromManagerProvider::class);
+    }
 
-	public function boot(App $app): void
-	{
-		//
-	}
+    public function boot(App $app): void
+    {
+        //
+    }
 }
