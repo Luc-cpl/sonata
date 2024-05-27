@@ -29,10 +29,14 @@ class SessionProvider implements ProviderInterface
 					if (!is_array($config) || !array_key_exists('driver', $config) || !array_key_exists('repository', $config)) {
 						return 'The auth guard config must be an array with keys "driver" and "repository"';
 					}
-					if (!is_subclass_of($config['driver'], AuthDriverInterface::class)) {
+					if (!class_exists($config['driver']) || !is_subclass_of($config['driver'], AuthDriverInterface::class)) {
 						return 'The guard driver must implement ' . AuthDriverInterface::class;
 					}
-					if (!is_subclass_of($config['repository'], RepositoryInterface::class)) {
+					// Allow the default repository, used for testing
+					if ($config['repository'] == RepositoryInterface::class) {
+						continue;
+					}
+					if (!class_exists($config['repository']) || !is_subclass_of($config['repository'], RepositoryInterface::class)) {
 						return 'The guard repository must implement ' . RepositoryInterface::class;
 					}
 				}

@@ -8,14 +8,15 @@ use Sonata\Interfaces\AuthInterface;
 class Auth
 {
 	private static array $usedGuards = [];
+
 	/**
-	 * Authenticate as the given user for testing purposes.
+	 * Authenticate as the given subject for testing purposes.
 	 */
-	public static function actingAs(object $user, ?string $guard = null): void
+	public static function actingAs(object $subject, ?string $guard = null): void
 	{
 		self::$usedGuards[] = $guard ?? null;
 		self::$usedGuards = array_unique(self::$usedGuards);
-		self::guard($guard)->authenticate($user);
+		self::guard($guard)->authenticate($subject);
 	}
 
 	/**

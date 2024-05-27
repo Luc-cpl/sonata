@@ -10,7 +10,7 @@ interface AuthDriverInterface extends AuthInterface
 	public function setGuard(string $guard): void;
 
 	/**
-	 * Sets the user repository to be used by the driver.
+	 * Sets the repository to be used by the driver.
 	 */
 	public function setRepository(RepositoryInterface $repository): void;
 }

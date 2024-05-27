@@ -3,6 +3,7 @@
 namespace Sonata\Doctrine\Providers;
 
 use Orkestra\App;
+use Orkestra\Interfaces\ProviderInterface;
 use Sonata\Doctrine\Listeners\FlushDoctrineData;
 use Symfony\Component\Console\Application;
 use Doctrine\DBAL\Tools\Console\ConnectionProvider;
@@ -14,12 +15,9 @@ use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\ORMSetup;
-use Sonata\Doctrine\Repositories\UserRepository;
-use Sonata\Interfaces\UserRepositoryInterface;
-use Sonata\Providers\AbstractDatabaseProvider;
 use ReflectionClass;
 
-class DoctrineProvider extends AbstractDatabaseProvider
+class DoctrineProvider implements ProviderInterface
 {
 	public array $listeners = [
 		FlushDoctrineData::class,
@@ -27,8 +25,6 @@ class DoctrineProvider extends AbstractDatabaseProvider
 
 	public function register(App $app): void
 	{
-		parent::register($app);
-
 		$app->config()->set('validation', [
 			'doctrine.entities'   => fn ($value) => is_array($value) ? true : 'The entities config must be an array',
 			'doctrine.connection' => fn ($value) => is_array($value) ? true : 'The connection config must be an array',
@@ -75,8 +71,10 @@ class DoctrineProvider extends AbstractDatabaseProvider
 
 		$app->bind(EntityManagerProvider::class, SingleManagerProvider::class);
 		$app->bind(ConnectionProvider::class, ConnectionFromManagerProvider::class);
-		$app->bind(UserRepositoryInterface::class, function (EntityManagerInterface $manager) use ($app) {
-			return new UserRepository($manager, $app->config()->get('sonata.user_entity'));
-		});
+	}
+
+	public function boot(App $app): void
+	{
+		//
 	}
 }

@@ -41,7 +41,8 @@ class SessionDriver implements AuthDriverInterface
 		/**
 		 * As in most cases we will use the subject() method in the request cycle,
 		 * we can just check if the subject() method returns null or not instead of
-		 * checking the database for the subject existence.
+		 * checking the database for the subject existence as only checking the session
+		 * not ensures that the subject is still valid.
 		 */
 		return $this->subject() !== null;
 	}
