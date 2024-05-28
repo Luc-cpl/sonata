@@ -1,6 +1,6 @@
 <?php
 
-namespace Sonata\Providers;
+namespace Sonata;
 
 use Orkestra\App;
 use Orkestra\Interfaces\ProviderInterface;

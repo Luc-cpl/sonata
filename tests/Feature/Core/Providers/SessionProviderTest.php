@@ -2,7 +2,7 @@
 
 use Orkestra\Providers\HooksProvider;
 use Sonata\Interfaces\SessionInterface;
-use Sonata\Providers\SessionProvider;
+use Sonata\SessionProvider;
 
 beforeEach(function () {
     app()->provider(SessionProvider::class);

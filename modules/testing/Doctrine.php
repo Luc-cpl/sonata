@@ -2,7 +2,7 @@
 
 namespace Sonata\Testing;
 
-use Sonata\Doctrine\Providers\DoctrineProvider;
+use Sonata\Doctrine\DoctrineProvider;
 use Doctrine\DBAL\LockMode;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\SchemaTool;

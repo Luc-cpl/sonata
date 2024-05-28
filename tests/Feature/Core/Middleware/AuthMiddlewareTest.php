@@ -4,7 +4,7 @@ use League\Route\Http\Exception\UnauthorizedException;
 use Sonata\AuthDrivers\SessionDriver;
 use Sonata\Interfaces\RepositoryInterface;
 use Sonata\Middleware\AuthorizationMiddleware;
-use Sonata\Providers\SessionProvider;
+use Sonata\SessionProvider;
 use Sonata\Testing\Auth;
 use Sonata\Testing\Doctrine;
 use Tests\Entities\DoctrineSubject;
