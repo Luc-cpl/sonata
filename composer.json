@@ -31,7 +31,8 @@
         "doctrine/dbal": "^4.0",
         "pestphp/pest": "^2.34",
         "symfony/cache": "^7.0",
-        "laravel/pint": "^1.16"
+        "laravel/pint": "^1.16",
+        "doctrine/migrations": "^3.7"
     },
     "config": {
         "allow-plugins": {

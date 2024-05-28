@@ -6,6 +6,7 @@ use Orkestra\App;
 use Orkestra\Interfaces\ProviderInterface;
 use Sonata\Doctrine\Listeners\FlushDoctrineData;
 use Symfony\Component\Console\Application;
+use Doctrine\Migrations\Tools\Console\ConsoleRunner as MigrationsConsoleRunner;
 use Doctrine\DBAL\Tools\Console\ConnectionProvider;
 use Doctrine\ORM\Tools\Console\ConsoleRunner;
 use Doctrine\ORM\Tools\Console\EntityManagerProvider;
@@ -38,12 +39,13 @@ class DoctrineProvider implements ProviderInterface
             ]],
         ]);
 
-        $app->decorate(Application::class, function ($cli) use ($app) {
+        $app->decorate(Application::class, function (Application $cli, App $app) {
             $app->call(ConsoleRunner::class . '::addCommands', [$cli]);
+            $app->call(MigrationsConsoleRunner::class . '::addCommands', [$cli]);
             return $cli;
         });
 
-        $app->bind(EntityManagerInterface::class, function () use ($app) {
+        $app->bind(EntityManagerInterface::class, function (App $app) {
             /** @var string */
             $env = $app->config()->get('env');
 

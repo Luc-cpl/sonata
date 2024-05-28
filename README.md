@@ -8,5 +8,5 @@ The cache library is used to cache the metadata of the entities and Doctrine rec
 You can install these libraries using the following command.
 
 ```bash
-composer require doctrine/orm doctrine/dbal symfony/cache
+composer require doctrine/orm doctrine/dbal doctrine/migrations symfony/cache
 ```
