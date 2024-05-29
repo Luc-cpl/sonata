@@ -4,7 +4,7 @@ use Sonata\AuthDrivers\SessionDriver;
 use Sonata\Authorization;
 use Sonata\Interfaces\RepositoryInterface;
 use Sonata\Interfaces\SessionInterface;
-use Sonata\Providers\SessionProvider;
+use Sonata\SessionProvider;
 use Tests\TestRepository;
 
 beforeEach(function () {

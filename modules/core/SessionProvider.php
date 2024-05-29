@@ -1,6 +1,6 @@
 <?php
 
-namespace Sonata\Providers;
+namespace Sonata;
 
 use Orkestra\App;
 use Orkestra\Interfaces\ProviderInterface;
@@ -51,7 +51,7 @@ class SessionProvider implements ProviderInterface
             'sonata.auth_guards'   => ['Auth guards'],
         ]);
 
-        $app->bind(SessionInterface::class, function () use ($app) {
+        $app->bind(SessionInterface::class, function (App $app) {
             /** @var SessionInterface */
             $session = $app->get($app->config()->get('sonata.session'));
             $session->start();
