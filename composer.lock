@@ -416,12 +416,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Luc-cpl/orkestra.git",
-                "reference": "b6f8b9c986731abdaf27b9d36a80f7715bf0c7e9"
+                "reference": "9b0e1dc70c129db9205f471dfe1211b0fba5a6e3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Luc-cpl/orkestra/zipball/b6f8b9c986731abdaf27b9d36a80f7715bf0c7e9",
-                "reference": "b6f8b9c986731abdaf27b9d36a80f7715bf0c7e9",
+                "url": "https://api.github.com/repos/Luc-cpl/orkestra/zipball/9b0e1dc70c129db9205f471dfe1211b0fba5a6e3",
+                "reference": "9b0e1dc70c129db9205f471dfe1211b0fba5a6e3",
                 "shasum": ""
             },
             "require": {
@@ -468,7 +468,7 @@
                 "issues": "https://github.com/Luc-cpl/orkestra/issues",
                 "source": "https://github.com/Luc-cpl/orkestra/tree/release/1.1.0"
             },
-            "time": "2024-05-28T04:18:15+00:00"
+            "time": "2024-05-29T03:15:47+00:00"
         },
         {
             "name": "nikic/fast-route",
