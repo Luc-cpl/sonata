@@ -1,5 +1,6 @@
 {
     "name": "luccpl/sonata",
+    "license": "MIT",
     "autoload": {
         "psr-4": {
             "Sonata\\": "modules/core",
