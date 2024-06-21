@@ -15,19 +15,19 @@ use Traversable;
  */
 interface IterableInterface extends Countable, IteratorAggregate
 {
-	/**
-	 * @return TCollection<array-key, TEntity>
-	 */
-	public function getIterator(): Traversable;
+    /**
+     * @return TCollection<array-key, TEntity>
+     */
+    public function getIterator(): Traversable;
 
-	/**
-	 * @return TEntity|null
-	 */
-	public function first(): ?object;
+    /**
+     * @return TEntity|null
+     */
+    public function first(): ?object;
 
     public function exists(): bool;
 
-	/**
+    /**
      * @return $this
      */
     public function slice(int $offset, int $limit): self;
