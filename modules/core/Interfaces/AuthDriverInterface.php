@@ -2,6 +2,12 @@
 
 namespace Sonata\Interfaces;
 
+use Sonata\Interfaces\Repository\IdentifiableInterface;
+
+/**
+ * @template T of object
+ * @extends AuthInterface<T>
+ */
 interface AuthDriverInterface extends AuthInterface
 {
     /**
@@ -11,6 +17,8 @@ interface AuthDriverInterface extends AuthInterface
 
     /**
      * Sets the repository to be used by the driver.
+     *
+     * @param IdentifiableInterface<T> $repository
      */
-    public function setRepository(RepositoryInterface $repository): void;
+    public function setRepository(IdentifiableInterface $repository): void;
 }

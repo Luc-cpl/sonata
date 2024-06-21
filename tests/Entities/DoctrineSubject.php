@@ -12,6 +12,10 @@ use Orkestra\Entities\Attributes\Faker;
  */
 #[Doctrine\Entity]
 #[Doctrine\Table(name: 'subjects')]
+/**
+ * @property-read ?int $id
+ * @property-read string $value
+ */
 class DoctrineSubject extends AbstractEntity
 {
     #[Doctrine\Id]

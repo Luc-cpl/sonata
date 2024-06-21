@@ -4,15 +4,19 @@ namespace Sonata;
 
 use Orkestra\Interfaces\ConfigurationInterface;
 use Sonata\Interfaces\AuthDriverInterface;
-use Sonata\Interfaces\RepositoryInterface;
+use Sonata\Interfaces\Repository\IdentifiableInterface;
 use Orkestra\Interfaces\AppContainerInterface;
 use Sonata\Interfaces\AuthInterface;
 use InvalidArgumentException;
 
+/**
+ * @template T of object
+ * @implements AuthInterface<T>
+ */
 class Authorization implements AuthInterface
 {
     /**
-     * @var AuthDriverInterface[]
+     * @var AuthDriverInterface<T>[]
      */
     private array $instances = [];
 
@@ -24,14 +28,18 @@ class Authorization implements AuthInterface
         private ConfigurationInterface $config,
         private AppContainerInterface $app
     ) {
-        $this->defaultGuard = $this->config->get('sonata.default_guard');
-        $this->currentGuard = $this->defaultGuard;
+        /** @var string */
+        $defaultGuard = $this->config->get('sonata.default_guard');
+        $this->defaultGuard = $defaultGuard;
+        $this->currentGuard = $defaultGuard;
     }
 
     /**
      * Retrieves the guard instance for the given guard key.
      * Usually this method should be called by a middleware to retrieve the
      * guard instance for the current request.
+     *
+     * @return AuthDriverInterface<T>
      */
     public function guard(?string $guard = null): AuthDriverInterface
     {
@@ -42,21 +50,20 @@ class Authorization implements AuthInterface
             return $this->instances[$guard];
         }
 
+        /** @var array<string, array{driver: class-string, repository: class-string}> */
         $guards = $this->config->get('sonata.auth_guards');
         if (!array_key_exists($guard, $guards)) {
             throw new InvalidArgumentException("The guard \"$guard\" does not exist");
         }
 
-        $guardKey   = $guard;
-        $guard      = $guards[$guard];
-        $driver     = $guard['driver'];
-        $repository = $guard['repository'];
+        $guardKey = $guard;
+        $guard = $guards[$guard];
 
-        /** @var AuthDriverInterface */
-        $driver = $this->app->make($driver);
+        /** @var AuthDriverInterface<T> */
+        $driver = $this->app->make($guard['driver']);
 
-        /** @var RepositoryInterface */
-        $repository = $this->app->get($repository);
+        /** @var IdentifiableInterface<T> */
+        $repository = $this->app->get($guard['repository']);
 
         $driver->setRepository($repository);
         $driver->setGuard($guardKey);

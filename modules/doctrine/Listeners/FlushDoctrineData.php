@@ -22,6 +22,9 @@ class FlushDoctrineData implements ListenerInterface
         return '{app}.http.router.response.before';
     }
 
+    /**
+     * @return void
+     */
     public function handle()
     {
         $entityManager = $this->app->get(EntityManagerInterface::class);

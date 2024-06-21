@@ -22,6 +22,9 @@ class SessionCommit implements ListenerInterface
         return '{app}.http.router.response.before';
     }
 
+    /**
+     * @return void
+     */
     public function handle()
     {
         $session = $this->app->get(SessionInterface::class);

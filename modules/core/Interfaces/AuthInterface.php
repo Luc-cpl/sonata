@@ -2,6 +2,9 @@
 
 namespace Sonata\Interfaces;
 
+/**
+ * @template T of object
+ */
 interface AuthInterface
 {
     /**
@@ -9,7 +12,8 @@ interface AuthInterface
      * Depending on the driver it may return some data as a result
      * to be retrieved in the request cycle.
      *
-     * @return array|string|void
+     * @param T $subject
+     * @return mixed[]|string|void
      */
     public function authenticate(object $subject);
 
@@ -20,6 +24,7 @@ interface AuthInterface
 
     /**
      * Retrieves the authenticated subject.
+     * @return T|null
      */
     public function subject(): ?object;
 

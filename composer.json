@@ -20,9 +20,14 @@
         }
     ],
     "scripts": {
+        "test": [
+            "@pest",
+            "@phpstan"
+        ],
         "pest": "vendor/bin/pest",
         "pest:coverage": "XDEBUG_MODE=coverage ./vendor/bin/pest --coverage --coverage-html=coverage",
-        "pint": "./vendor/bin/pint"
+        "pint": "./vendor/bin/pint",
+        "phpstan": "vendor/bin/phpstan analyse"
     },
     "require": {
         "luccpl/orkestra": "dev-release/1.1.0"
@@ -33,7 +38,8 @@
         "pestphp/pest": "^2.34",
         "symfony/cache": "^7.0",
         "laravel/pint": "^1.16",
-        "doctrine/migrations": "^3.7"
+        "doctrine/migrations": "^3.7",
+        "phpstan/phpstan": "^1.11"
     },
     "config": {
         "allow-plugins": {

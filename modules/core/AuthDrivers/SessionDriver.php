@@ -3,15 +3,25 @@
 namespace Sonata\AuthDrivers;
 
 use Sonata\Interfaces\AuthDriverInterface;
-use Sonata\Interfaces\RepositoryInterface;
+use Sonata\Interfaces\Repository\IdentifiableInterface;
 use Sonata\Interfaces\SessionInterface;
 
+/**
+ * @template T of object
+ * @implements AuthDriverInterface<T>
+ */
 class SessionDriver implements AuthDriverInterface
 {
-    protected RepositoryInterface $repository;
+    /**
+     * @var IdentifiableInterface<T>
+     */
+    protected IdentifiableInterface $repository;
 
     protected string $guard;
 
+    /**
+     * @var T|null
+     */
     protected ?object $subject = null;
 
     public function __construct(
@@ -25,15 +35,21 @@ class SessionDriver implements AuthDriverInterface
         $this->guard = $guard;
     }
 
-    public function setRepository(RepositoryInterface $repository): void
+    /**
+     * @param IdentifiableInterface<T> $repository
+     */
+    public function setRepository(IdentifiableInterface $repository): void
     {
         $this->repository = $repository;
     }
 
-    public function authenticate(object $subject)
+    public function authenticate(object $subject): void
     {
+        /** @var string */
+        $guardKey = $this->guardKey();
         $this->subject = $subject;
-        $this->session->set($this->guardKey(), $subject->id);
+        // @phpstan-ignore-next-line
+        $this->session->set($guardKey, $subject->id);
     }
 
     public function check(): bool
@@ -52,7 +68,12 @@ class SessionDriver implements AuthDriverInterface
         if (!$this->session->has($this->guardKey())) {
             return null;
         }
-        $this->subject ??= $this->repository->whereId($this->session->get($this->guardKey()))->first();
+        /** @var string */
+        $guardKey = $this->session->get($this->guardKey());
+
+        /** @var T|null */
+        $subject = $this->repository->get($guardKey);
+        $this->subject ??= $subject;
         return $this->subject;
     }
 

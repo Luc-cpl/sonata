@@ -2,7 +2,7 @@
 
 use Sonata\AuthDrivers\SessionDriver;
 use Sonata\Authorization;
-use Sonata\Interfaces\RepositoryInterface;
+use Sonata\Interfaces\Repository\IdentifiableInterface;
 use Sonata\Interfaces\SessionInterface;
 use Sonata\SessionProvider;
 use Tests\TestRepository;
@@ -79,14 +79,14 @@ it('should throw an exception if the guard driver does not implement the AuthDri
     app()->config()->set('sonata.auth_guards', [
         'web' => [
             'driver'     => Authorization::class,
-            'repository' => RepositoryInterface::class,
+            'repository' => IdentifiableInterface::class,
         ],
     ]);
 
     app()->get(Authorization::class)->guard('web');
 })->throws(InvalidArgumentException::class, 'The guard driver must implement Sonata\Interfaces\AuthDriverInterface');
 
-it('should throw an exception if the guard repository does not implement the RepositoryInterface', function () {
+it('should throw an exception if the guard repository does not implement the IdentifiableInterface', function () {
     app()->config()->set('sonata.auth_guards', [
         'web' => [
             'driver'     => SessionDriver::class,
@@ -95,4 +95,4 @@ it('should throw an exception if the guard repository does not implement the Rep
     ]);
 
     app()->get(Authorization::class)->guard('web');
-})->throws(InvalidArgumentException::class, 'The guard repository must implement ' . RepositoryInterface::class);
+})->throws(InvalidArgumentException::class, 'The guard repository must implement ' . IdentifiableInterface::class);

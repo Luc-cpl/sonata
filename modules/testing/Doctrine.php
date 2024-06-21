@@ -63,6 +63,7 @@ class Doctrine
      *
      * @template T of object
      * @param class-string<T> $className
+     * @param mixed[] $args
      * @return T[]
      */
     public static function factory(string $className, int $number = 1, array $args = []): array

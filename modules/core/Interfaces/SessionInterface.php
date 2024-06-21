@@ -36,6 +36,8 @@ interface SessionInterface
 
     /**
      * Retrieves all session variables.
+     *
+     * @return array<string, mixed>
      */
     public function all(): array;
 

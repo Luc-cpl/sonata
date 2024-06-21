@@ -16,6 +16,7 @@ it('should be able to create a subject', function () {
     $repository->persist($subject);
     Doctrine::flush();
 
+    /** @var Subject */
     $foundSubject = Doctrine::find(Subject::class, $subject->id);
 
     expect($subject->id)->toBeInt();
@@ -32,6 +33,8 @@ it('should be able to update a subject', function () {
      * when the entity manager is flushed.
      */
     Doctrine::flush();
+
+    /** @var Subject */
     $foundSubject = Doctrine::find(Subject::class, $subject->id);
 
     expect($foundSubject->value)->toBe('new value');
@@ -61,7 +64,7 @@ it('should be able to delete a subject', function () {
     $id = $subject->id;
 
     $repository = app()->get(RepositoryInterface::class);
-    $repository->remove($subject);
+    $repository->delete($subject);
 
     Doctrine::flush();
 
@@ -74,22 +77,9 @@ it('should be able to find a subject by id', function () {
     $subjects = Doctrine::factory(subject::class, 10);
 
     $repository = app()->get(RepositoryInterface::class);
-    $foundSubjects = $repository->whereId($subjects[0]->id)->first();
+    $foundSubjects = $repository->get($subjects[0]->id);
 
     expect($foundSubjects->id)->toBe($subjects[0]->id);
-
-    $subjectsIds = array_map(fn ($subject) => $subject->id, $subjects);
-    $subjectsIds = array_slice($subjectsIds, 0, 5);
-
-    $foundSubjects = $repository->whereId($subjectsIds)->getIterator();
-    $foundSubjects = iterator_to_array($foundSubjects);
-    $foundSubjects = array_map(fn ($subject) => $subject->id, $foundSubjects);
-
-    sort($subjectsIds);
-    sort($foundSubjects);
-
-    expect(count($foundSubjects))->toBe(5);
-    expect($foundSubjects)->toBe($subjectsIds);
 });
 
 it('should be able to paginate subjects', function () {

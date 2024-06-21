@@ -8,9 +8,14 @@ use Traversable;
 
 /**
  * A simple dummy repository implementation to be used in the tests.
+ *
+ * @implements RepositoryInterface<ArrayIterator, object, array{id:string,mixed}>
  */
 class TestRepository implements RepositoryInterface
 {
+    /**
+     * @param object[] $data
+     */
     public function __construct(
         private array $data = []
     ) {
@@ -22,11 +27,9 @@ class TestRepository implements RepositoryInterface
         return !empty($this->data) ? array_values($this->data)[0] : null;
     }
 
-    public function whereId(int|string|array $id): self
+    public function get(int|string $id): ?object
     {
-        $clone = clone $this;
-        $clone->data = array_filter($this->data, fn ($entity) => $entity->id === $id);
-        return $clone;
+        return $this->data[$id] ?? null;
     }
 
     public function slice(int $offset, int $limit): self
@@ -36,13 +39,20 @@ class TestRepository implements RepositoryInterface
         return $clone;
     }
 
+    public function make(array $data): object
+    {
+        return (object) $data;
+    }
+
     public function persist(object $entity): void
     {
+        // @phpstan-ignore-next-line
         $this->data[$entity->id] = $entity;
     }
 
-    public function remove(object $entity): void
+    public function delete(object $entity): void
     {
+        // @phpstan-ignore-next-line
         unset($this->data[$entity->id]);
     }
 
@@ -54,5 +64,10 @@ class TestRepository implements RepositoryInterface
     public function count(): int
     {
         return count($this->data);
+    }
+
+    public function exists(): bool
+    {
+        return !empty($this->data);
     }
 }

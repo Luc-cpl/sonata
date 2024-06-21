@@ -5,13 +5,16 @@ namespace Sonata;
 use Orkestra\App;
 use Orkestra\Interfaces\ProviderInterface;
 use Sonata\Interfaces\AuthDriverInterface;
-use Sonata\Interfaces\RepositoryInterface;
+use Sonata\Interfaces\Repository\IdentifiableInterface;
 use Sonata\Interfaces\SessionInterface;
 use Sonata\Listeners\SessionCommit;
 use Sonata\Sessions\PHPSession;
 
 class SessionProvider implements ProviderInterface
 {
+    /**
+     * @var array<class-string>
+     */
     public array $listeners = [
         SessionCommit::class,
     ];
@@ -29,15 +32,21 @@ class SessionProvider implements ProviderInterface
                     if (!is_array($config) || !array_key_exists('driver', $config) || !array_key_exists('repository', $config)) {
                         return 'The auth guard config must be an array with keys "driver" and "repository"';
                     }
-                    if (!class_exists($config['driver']) || !is_subclass_of($config['driver'], AuthDriverInterface::class)) {
+
+                    if (!class_exists($config['driver']) && !interface_exists($config['driver'])) {
+                        return 'The guard driver must be a class or interface';
+                    }
+
+                    if (!is_subclass_of($config['driver'], AuthDriverInterface::class)) {
                         return 'The guard driver must implement ' . AuthDriverInterface::class;
                     }
-                    // Allow the default repository, used for testing
-                    if ($config['repository'] == RepositoryInterface::class) {
-                        continue;
+
+                    if (!class_exists($config['repository']) && !interface_exists($config['repository'])) {
+                        return 'The guard repository must be a class or interface';
                     }
-                    if (!class_exists($config['repository']) || !is_subclass_of($config['repository'], RepositoryInterface::class)) {
-                        return 'The guard repository must implement ' . RepositoryInterface::class;
+
+                    if (!is_subclass_of($config['repository'], IdentifiableInterface::class)) {
+                        return 'The guard repository must implement ' . IdentifiableInterface::class;
                     }
                 }
                 return true;
@@ -52,8 +61,10 @@ class SessionProvider implements ProviderInterface
         ]);
 
         $app->bind(SessionInterface::class, function (App $app) {
+            /** @var class-string */
+            $class = $app->config()->get('sonata.session');
             /** @var SessionInterface */
-            $session = $app->get($app->config()->get('sonata.session'));
+            $session = $app->get($class);
             $session->start();
             return $session;
         });

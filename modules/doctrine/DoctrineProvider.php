@@ -26,6 +26,9 @@ use ReflectionClass;
 
 class DoctrineProvider implements ProviderInterface
 {
+    /**
+     * @var array<class-string>
+     */
     public array $listeners = [
         FlushDoctrineData::class,
     ];
@@ -63,7 +66,8 @@ class DoctrineProvider implements ProviderInterface
 
             foreach ($entitiesPaths as &$path) {
                 if (class_exists($path)) {
-                    $path = dirname((new ReflectionClass($path))->getFileName());
+                    $filename = (new ReflectionClass($path))->getFileName();
+                    $path = $filename ? dirname($filename) : $path;
                 }
             }
 
@@ -75,6 +79,7 @@ class DoctrineProvider implements ProviderInterface
                 isDevMode: $env === 'development',
             );
 
+            // @phpstan-ignore-next-line
             $connection = DriverManager::getConnection($connectionConfig, $config);
 
             return new EntityManager($connection, $config);

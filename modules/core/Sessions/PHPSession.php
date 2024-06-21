@@ -101,6 +101,7 @@ class PHPSession implements SessionInterface
     public function getFlash(string $key): mixed
     {
         $this->ensureStarted();
+        /** @var string[] */
         $flashData = $this->get('flash') ?? [];
         return $flashData[$key] ?? null;
     }

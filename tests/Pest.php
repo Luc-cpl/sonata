@@ -1,6 +1,7 @@
 <?php
 
 use Doctrine\ORM\EntityManagerInterface;
+use Orkestra\Entities\EntityFactory;
 use Orkestra\Testing\AbstractTestCase;
 use Sonata\Doctrine\Repositories\AbstractRepository;
 use Sonata\Interfaces\RepositoryInterface;
@@ -31,15 +32,15 @@ uses(AbstractTestCase::class)->in(__DIR__);
 |
 */
 
-function doctrineTest()
+function doctrineTest(): void
 {
     Doctrine::init();
     app()->config()->set('doctrine.entities', fn () => [DoctrineSubject::class]);
-    app()->bind(RepositoryInterface::class, function (EntityManagerInterface $manager) {
-        return new class ($manager) extends AbstractRepository {
-            public function __construct(EntityManagerInterface $manager)
+    app()->bind(RepositoryInterface::class, function (EntityFactory $factory, EntityManagerInterface $manager) {
+        return new class ($factory, $manager) extends AbstractRepository {
+            public function __construct(EntityFactory $factory, EntityManagerInterface $manager)
             {
-                parent::__construct($manager, DoctrineSubject::class);
+                parent::__construct($factory, $manager, DoctrineSubject::class);
             }
         };
     });
