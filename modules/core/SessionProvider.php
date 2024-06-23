@@ -8,6 +8,7 @@ use Sonata\Interfaces\AuthDriverInterface;
 use Sonata\Interfaces\Repository\IdentifiableInterface;
 use Sonata\Interfaces\SessionInterface;
 use Sonata\Listeners\SessionCommit;
+use Sonata\Middleware\AuthorizationMiddleware;
 use Sonata\Sessions\PHPSession;
 
 class SessionProvider implements ProviderInterface
@@ -17,6 +18,10 @@ class SessionProvider implements ProviderInterface
      */
     public array $listeners = [
         SessionCommit::class,
+    ];
+
+    public array $middleware = [
+        'auth' => AuthorizationMiddleware::class,
     ];
 
     public function register(App $app): void

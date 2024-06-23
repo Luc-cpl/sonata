@@ -38,10 +38,7 @@ function doctrineTest(): void
     app()->config()->set('doctrine.entities', fn () => [DoctrineSubject::class]);
     app()->bind(RepositoryInterface::class, function (EntityFactory $factory, EntityManagerInterface $manager) {
         return new class ($factory, $manager) extends AbstractRepository {
-            public function __construct(EntityFactory $factory, EntityManagerInterface $manager)
-            {
-                parent::__construct($factory, $manager, DoctrineSubject::class);
-            }
+            protected string $entityClass = DoctrineSubject::class;
         };
     });
 }

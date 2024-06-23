@@ -9,22 +9,38 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Sonata\Authorization;
 
+/**
+ * Middleware to authorize the access to a route.
+ *
+ * @template T of object
+ */
 class AuthorizationMiddleware extends AbstractMiddleware
 {
+    /**
+     * @param Authorization<T> $auth
+     */
     public function __construct(
+        private Authorization $auth,
         private ?string $guard = null,
+        private bool $guest = false
     ) {
         //
     }
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        $auth = $this->app->get(Authorization::class);
+        $auth = $this->auth;
         if ($this->guard !== null) {
             $auth = $auth->guard($this->guard);
         }
 
-        if (!$auth->check()) {
+        $isLoggedIn = $auth->check();
+
+        if ($this->guest && $isLoggedIn) {
+            throw new UnauthorizedException();
+        }
+
+        if (!$this->guest && !$isLoggedIn) {
             throw new UnauthorizedException();
         }
 

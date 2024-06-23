@@ -83,7 +83,7 @@ class Authorization implements AuthInterface
         return $this->guard($this->currentGuard)->check();
     }
 
-    public function authenticate(object $subject): void
+    public function authenticate(object $subject)
     {
         $this->guard($this->currentGuard)->authenticate($subject);
     }

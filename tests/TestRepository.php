@@ -32,6 +32,14 @@ class TestRepository implements RepositoryInterface
         return $this->data[$id] ?? null;
     }
 
+    public function whereId(int|string|array $id): self
+    {
+        $clone = clone $this;
+        // @phpstan-ignore-next-line
+        $clone->data = array_filter($this->data, fn($entity) => in_array($entity->id, (array) $id));
+        return $clone;
+    }
+
     public function slice(int $offset, int $limit): self
     {
         $clone = clone $this;

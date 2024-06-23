@@ -13,6 +13,11 @@ use Orkestra\Entities\EntityFactory;
 abstract class AbstractBaseRepository
 {
     /**
+     * @var class-string<TEntity>
+     */
+    protected string $entityClass;
+
+    /**
      * @var EntityRepository<TEntity>
      */
     protected EntityRepository $repository;
@@ -21,15 +26,11 @@ abstract class AbstractBaseRepository
 
     protected string $idColumn = 'id';
 
-    /**
-     * @param class-string<TEntity> $entityClass
-     */
     public function __construct(
         protected EntityFactory $factory,
         protected EntityManagerInterface $manager,
-        protected string $entityClass,
     ) {
-        $this->repository = $manager->getRepository($entityClass);
+        $this->repository = $manager->getRepository($this->entityClass);
         $this->builder    = $this->repository->createQueryBuilder('this');
     }
 
