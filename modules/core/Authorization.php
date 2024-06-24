@@ -7,6 +7,7 @@ use Sonata\Interfaces\AuthDriverInterface;
 use Sonata\Interfaces\Repository\IdentifiableInterface;
 use Orkestra\Interfaces\AppContainerInterface;
 use Sonata\Interfaces\AuthInterface;
+use Sonata\Interfaces\SessionInterface;
 use InvalidArgumentException;
 
 /**
@@ -65,6 +66,10 @@ class Authorization implements AuthInterface
         /** @var IdentifiableInterface<T> */
         $repository = $this->app->get($guard['repository']);
 
+        if (!$driver->session()->started()) {
+            $driver->session()->start();
+        }
+
         $driver->setRepository($repository);
         $driver->setGuard($guardKey);
 
@@ -85,11 +90,16 @@ class Authorization implements AuthInterface
 
     public function authenticate(object $subject)
     {
-        $this->guard($this->currentGuard)->authenticate($subject);
+        return $this->guard($this->currentGuard)->authenticate($subject);
     }
 
     public function revoke(): void
     {
         $this->guard($this->currentGuard)->revoke();
+    }
+
+    public function session(): SessionInterface
+    {
+        return $this->guard($this->currentGuard)->session();
     }
 }

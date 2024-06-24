@@ -5,6 +5,11 @@ namespace Sonata\Interfaces;
 interface SessionInterface
 {
     /**
+     * Retrieves the session id.
+     */
+    public function getId(): string;
+
+    /**
      * Starts the session.
      * Should follows the PHP session_start() function signature.
      *

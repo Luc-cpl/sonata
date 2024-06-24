@@ -82,6 +82,11 @@ class SessionDriver implements AuthDriverInterface
         $this->session->remove($this->guardKey());
     }
 
+    public function session(): SessionInterface
+    {
+        return $this->session;
+    }
+
     protected function guardKey(): string
     {
         return "guards.{$this->guard}.subject";

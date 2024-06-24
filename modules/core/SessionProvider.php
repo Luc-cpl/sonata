@@ -20,6 +20,9 @@ class SessionProvider implements ProviderInterface
         SessionCommit::class,
     ];
 
+    /**
+     * @var array<class-string>
+     */
     public array $middleware = [
         'auth' => AuthorizationMiddleware::class,
     ];
@@ -70,7 +73,6 @@ class SessionProvider implements ProviderInterface
             $class = $app->config()->get('sonata.session');
             /** @var SessionInterface */
             $session = $app->get($class);
-            $session->start();
             return $session;
         });
     }

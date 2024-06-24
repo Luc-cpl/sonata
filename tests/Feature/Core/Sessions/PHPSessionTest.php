@@ -126,3 +126,9 @@ it('should throw an exception if the session is not started', function ($call, $
     ['flash', ['message', 'Hello, World!']],
     ['commit', []],
 ])->expectException(RuntimeException::class);
+
+it('should get the session id', function () {
+    app()->get(PHPSession::class)->start();
+    expect(app()->get(PHPSession::class)->getId())->toBe(session_id());
+    expect(strlen(app()->get(PHPSession::class)->getId()))->toBe(26);
+});

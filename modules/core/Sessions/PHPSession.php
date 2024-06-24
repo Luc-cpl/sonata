@@ -2,7 +2,7 @@
 
 namespace Sonata\Sessions;
 
-use Orkestra\Testing\App;
+use Orkestra\App;
 use RuntimeException;
 use Sonata\Interfaces\SessionInterface;
 
@@ -21,6 +21,11 @@ class PHPSession implements SessionInterface
         private App $app
     ) {
         //
+    }
+
+    public function getId(): string
+    {
+        return session_id() ?: '';
     }
 
     public function start(array $params = []): bool

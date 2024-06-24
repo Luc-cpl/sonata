@@ -32,4 +32,9 @@ interface AuthInterface
      * Revokes the subject authentication.
      */
     public function revoke(): void;
+
+    /**
+     * Retrieves the used session instance.
+     */
+    public function session(): SessionInterface;
 }

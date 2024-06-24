@@ -10,16 +10,11 @@ beforeEach(function () {
     app()->config()->set('sonata.auth_guards', []);
 });
 
-it('should auto start a session when retrieve from interface', function () {
-    session_write_close();
-    expect(app()->get(SessionInterface::class)->started())->toBeTrue();
-});
-
 it('should commit the session interface on `{app}.http.router.response.before` hook', function () {
     session_write_close();
     app()->provider(HooksProvider::class);
     $session = app()->get(SessionInterface::class);
-
+    $session->start();
     expect(app()->get(SessionInterface::class)->started())->toBeTrue();
 
     app()->hookCall('http.router.response.before');
