@@ -4,7 +4,7 @@ namespace Sonata;
 
 use Orkestra\App;
 use Orkestra\Interfaces\ProviderInterface;
-use Sonata\Interfaces\AuthDriverInterface;
+use Sonata\Interfaces\AuthGuardInterface;
 use Sonata\Interfaces\Repository\IdentifiableInterface;
 use Sonata\Interfaces\SessionInterface;
 use Sonata\Listeners\SessionCommit;
@@ -45,15 +45,17 @@ class SessionProvider implements ProviderInterface
                         return 'The guard driver must be a class or interface';
                     }
 
-                    if (!is_subclass_of($config['driver'], AuthDriverInterface::class)) {
-                        return 'The guard driver must implement ' . AuthDriverInterface::class;
+                    $driverImplementations = class_implements($config['driver']);
+                    if (!in_array(SessionInterface::class, $driverImplementations) && $config['driver'] !== SessionInterface::class) {
+                        return 'The guard driver must implement ' . SessionInterface::class;
                     }
 
                     if (!class_exists($config['repository']) && !interface_exists($config['repository'])) {
                         return 'The guard repository must be a class or interface';
                     }
 
-                    if (!is_subclass_of($config['repository'], IdentifiableInterface::class)) {
+                    $repositoryImplementations = class_implements($config['repository']);
+                    if (!in_array(IdentifiableInterface::class, $repositoryImplementations)) {
                         return 'The guard repository must implement ' . IdentifiableInterface::class;
                     }
                 }
@@ -75,6 +77,8 @@ class SessionProvider implements ProviderInterface
             $session = $app->get($class);
             return $session;
         });
+
+        $app->bind(AuthGuardInterface::class, AuthGuard::class);
     }
 
     public function boot(App $app): void

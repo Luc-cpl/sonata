@@ -1,38 +1,39 @@
 <?php
 
-namespace Sonata\AuthDrivers;
+namespace Sonata;
 
-use Sonata\Interfaces\AuthDriverInterface;
+use Sonata\Interfaces\AuthGuardInterface;
 use Sonata\Interfaces\Repository\IdentifiableInterface;
 use Sonata\Interfaces\SessionInterface;
 
 /**
  * @template T of object
- * @implements AuthDriverInterface<T>
+ * @implements AuthGuardInterface<T>
  */
-class SessionDriver implements AuthDriverInterface
+class AuthGuard implements AuthGuardInterface
 {
     /**
      * @var IdentifiableInterface<T>
      */
     protected IdentifiableInterface $repository;
 
-    protected string $guard;
+    protected string $name;
+
+    protected SessionInterface $session;
 
     /**
      * @var T|null
      */
     protected ?object $subject = null;
 
-    public function __construct(
-        protected SessionInterface $session
-    ) {
-        //
+    public function setName(string $name): void
+    {
+        $this->name = $name;
     }
 
-    public function setGuard(string $guard): void
+    public function setDriver(SessionInterface $session): void
     {
-        $this->guard = $guard;
+        $this->session = $session;
     }
 
     /**
@@ -89,6 +90,6 @@ class SessionDriver implements AuthDriverInterface
 
     protected function guardKey(): string
     {
-        return "guards.{$this->guard}.subject";
+        return "guards.{$this->name}.subject";
     }
 }

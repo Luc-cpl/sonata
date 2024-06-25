@@ -3,7 +3,7 @@
 namespace Sonata;
 
 use Orkestra\Interfaces\ConfigurationInterface;
-use Sonata\Interfaces\AuthDriverInterface;
+use Sonata\Interfaces\AuthGuardInterface;
 use Sonata\Interfaces\Repository\IdentifiableInterface;
 use Orkestra\Interfaces\AppContainerInterface;
 use Sonata\Interfaces\AuthInterface;
@@ -17,7 +17,7 @@ use InvalidArgumentException;
 class Authorization implements AuthInterface
 {
     /**
-     * @var AuthDriverInterface<T>[]
+     * @var AuthGuardInterface<T>[]
      */
     private array $instances = [];
 
@@ -40,9 +40,9 @@ class Authorization implements AuthInterface
      * Usually this method should be called by a middleware to retrieve the
      * guard instance for the current request.
      *
-     * @return AuthDriverInterface<T>
+     * @return AuthGuardInterface<T>
      */
-    public function guard(?string $guard = null): AuthDriverInterface
+    public function guard(?string $guard = null): AuthGuardInterface
     {
         $guard ??= $this->defaultGuard;
         $this->currentGuard = $guard;
@@ -58,24 +58,29 @@ class Authorization implements AuthInterface
         }
 
         $guardKey = $guard;
-        $guard = $guards[$guard];
+        $guardParams = $guards[$guard];
 
-        /** @var AuthDriverInterface<T> */
-        $driver = $this->app->make($guard['driver']);
+        /** @var AuthGuardInterface<T> */
+        $guard = $this->app->make(AuthGuardInterface::class);
+
+        /** @var SessionInterface */
+        $driver = $this->app->get($guardParams['driver']);
+
+        $guard->setDriver($driver);
 
         /** @var IdentifiableInterface<T> */
-        $repository = $this->app->get($guard['repository']);
+        $repository = $this->app->get($guardParams['repository']);
 
-        if (!$driver->session()->started()) {
-            $driver->session()->start();
+        if (!$guard->session()->started()) {
+            $guard->session()->start();
         }
 
-        $driver->setRepository($repository);
-        $driver->setGuard($guardKey);
+        $guard->setRepository($repository);
+        $guard->setName($guardKey);
 
-        $this->instances[$guardKey] = $driver;
+        $this->instances[$guardKey] = $guard;
 
-        return $driver;
+        return $guard;
     }
 
     public function subject(): ?object

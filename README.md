@@ -23,7 +23,7 @@ To configure authentication guards, add the `sonata.auth_guards` configuration. 
 ```php
 $app->config()->set('sonata.auth_guards', [
     'guard_key' => [
-        'driver' => Sonata\AuthDrivers\SessionDriver::class,  // An implementation of Sonata\Interfaces\AuthDriverInterface
+        'driver' => Sonata\Sessions\PHPSession::class,  // An implementation of Sonata\Interfaces\AuthGuardInterface
         'repository' => YourRepository::class,  // An implementation of Sonata\Interfaces\Repository\IdentifiableInterface
     ],
 ]);

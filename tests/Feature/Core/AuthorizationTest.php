@@ -1,6 +1,5 @@
 <?php
 
-use Sonata\AuthDrivers\SessionDriver;
 use Sonata\Authorization;
 use Sonata\Interfaces\Repository\IdentifiableInterface;
 use Sonata\Interfaces\SessionInterface;
@@ -12,11 +11,11 @@ beforeEach(function () {
     app()->config()->set('sonata.default_guard', 'web');
     app()->config()->set('sonata.auth_guards', fn () => [
         'web' => [
-            'driver'     => SessionDriver::class,
+            'driver'     => SessionInterface::class,
             'repository' => TestRepository::class,
         ],
         'web2' => [
-            'driver'     => SessionDriver::class,
+            'driver'     => SessionInterface::class,
             'repository' => TestRepository::class,
         ],
     ]);
@@ -75,7 +74,7 @@ it('should throw an exception if the guard does not exist', function () {
     app()->get(Authorization::class)->guard('web3');
 })->throws(InvalidArgumentException::class, 'The guard "web3" does not exist');
 
-it('should throw an exception if the guard driver does not implement the AuthDriverInterface', function () {
+it('should throw an exception if the guard driver does not implement the SessionInterface', function () {
     app()->config()->set('sonata.auth_guards', [
         'web' => [
             'driver'     => Authorization::class,
@@ -84,13 +83,13 @@ it('should throw an exception if the guard driver does not implement the AuthDri
     ]);
 
     app()->get(Authorization::class)->guard('web');
-})->throws(InvalidArgumentException::class, 'The guard driver must implement Sonata\Interfaces\AuthDriverInterface');
+})->throws(InvalidArgumentException::class, 'The guard driver must implement Sonata\Interfaces\SessionInterface');
 
 it('should throw an exception if the guard repository does not implement the IdentifiableInterface', function () {
     app()->config()->set('sonata.auth_guards', [
         'web' => [
-            'driver'     => SessionDriver::class,
-            'repository' => SessionDriver::class,
+            'driver'     => SessionInterface::class,
+            'repository' => SessionInterface::class,
         ],
     ]);
 
