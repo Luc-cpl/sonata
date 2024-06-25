@@ -20,36 +20,36 @@ beforeEach(function () {
         ],
     ]);
 
-    // Add a test subject to the repository
+    // Add a test user to the repository
     app()->bind(TestRepository::class, TestRepository::class)->constructor(data: [
         1 => (object) ['id' => 1],
     ]);
 });
 
-it('should authenticate a subject with default guard', function () {
+it('should authenticate a user with default guard', function () {
     $session = app()->get(SessionInterface::class);
-    $subject = (object) ['id' => 1];
-    app()->get(Authorization::class)->authenticate($subject);
+    $user = (object) ['id' => 1];
+    app()->get(Authorization::class)->authenticate($user);
 
-    expect(app()->get(Authorization::class)->subject()->id)->toBe(1);
-    expect(app()->get(Authorization::class)->guard('web')->subject()->id)->toBe(1);
-    expect(app()->get(Authorization::class)->guard('web2')->subject())->toBeNull();
-    expect($session->get('guards.web.subject'))->toBe($subject->id);
+    expect(app()->get(Authorization::class)->user()->id)->toBe(1);
+    expect(app()->get(Authorization::class)->guard('web')->user()->id)->toBe(1);
+    expect(app()->get(Authorization::class)->guard('web2')->user())->toBeNull();
+    expect($session->get('web.user_id'))->toBe($user->id);
 });
 
-it('can check if a subject is authenticated with default guard', function () {
+it('can check if a user is authenticated with default guard', function () {
     $_SESSION ??= [];
-    $_SESSION['app.sonata.guards.web.subject'] = 1;
+    $_SESSION['app.sonata.web.user_id'] = 1;
 
     expect(app()->get(Authorization::class)->check())->toBeTrue();
     expect(app()->get(Authorization::class)->guard('web')->check())->toBeTrue();
     expect(app()->get(Authorization::class)->guard('web2')->check())->toBeFalse();
 });
 
-it('can logout a subject with default guard', function () {
+it('can logout a user with default guard', function () {
     $_SESSION ??= [];
-    $_SESSION['app.sonata.guards.web.subject'] = 1;
-    $_SESSION['app.sonata.guards.web2.subject'] = 1;
+    $_SESSION['app.sonata.web.user_id'] = 1;
+    $_SESSION['app.sonata.web2.user_id'] = 1;
 
     app()->get(Authorization::class)->revoke();
 
@@ -60,8 +60,8 @@ it('can logout a subject with default guard', function () {
 
 it('should change the current guard in use', function () {
     $_SESSION ??= [];
-    $_SESSION['app.sonata.guards.web.subject'] = null;
-    $_SESSION['app.sonata.guards.web2.subject'] = 1;
+    $_SESSION['app.sonata.guards.web.user'] = null;
+    $_SESSION['app.sonata.guards.web2.user'] = 1;
 
     app()->get(Authorization::class)->guard('web2');
 

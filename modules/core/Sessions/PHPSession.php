@@ -3,14 +3,16 @@
 namespace Sonata\Sessions;
 
 use Orkestra\App;
-use RuntimeException;
 use Sonata\Interfaces\SessionInterface;
+use RuntimeException;
 
 class PHPSession implements SessionInterface
 {
     private bool $avoidCommit = false;
 
     private bool $started = false;
+
+    private ?string $guard = null;
 
     /**
      * @var array<string, mixed>
@@ -21,6 +23,13 @@ class PHPSession implements SessionInterface
         private App $app
     ) {
         //
+    }
+
+    public function guardedBy(string $name): self
+    {
+        $clone = clone $this;
+        $clone->guard = $name;
+        return $clone;
     }
 
     public function getId(): string
@@ -67,6 +76,21 @@ class PHPSession implements SessionInterface
             return;
         }
         session_commit();
+    }
+
+    public function setUserId(int|string $userId): void
+    {
+        $this->set('user_id', $userId);
+    }
+
+    public function getUserId(): int|string|null
+    {
+        return $this->get('user_id');
+    }
+
+    public function removeUserId(): void
+    {
+        $this->remove('user_id');
     }
 
     public function set(string $key, mixed $value): void
@@ -143,6 +167,7 @@ class PHPSession implements SessionInterface
 
     private function getPrefix(): string
     {
-        return $this->app->slug() . '.sonata.';
+        $prefix = $this->app->slug() . '.sonata.';
+        return $this->guard ? $prefix . $this->guard . '.' : $prefix;
     }
 }

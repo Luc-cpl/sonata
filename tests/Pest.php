@@ -6,7 +6,7 @@ use Orkestra\Testing\AbstractTestCase;
 use Sonata\Doctrine\Repositories\AbstractRepository;
 use Sonata\Interfaces\RepositoryInterface;
 use Sonata\Testing\Doctrine;
-use Tests\Entities\DoctrineSubject;
+use Tests\Entities\DoctrineUser;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,10 +35,10 @@ uses(AbstractTestCase::class)->in(__DIR__);
 function doctrineTest(): void
 {
     Doctrine::init();
-    app()->config()->set('doctrine.entities', fn () => [DoctrineSubject::class]);
+    app()->config()->set('doctrine.entities', fn () => [DoctrineUser::class]);
     app()->bind(RepositoryInterface::class, function (EntityFactory $factory, EntityManagerInterface $manager) {
         return new class ($factory, $manager) extends AbstractRepository {
-            protected string $entityClass = DoctrineSubject::class;
+            protected string $entityClass = DoctrineUser::class;
         };
     });
 }

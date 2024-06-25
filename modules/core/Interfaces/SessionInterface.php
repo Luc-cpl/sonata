@@ -5,6 +5,13 @@ namespace Sonata\Interfaces;
 interface SessionInterface
 {
     /**
+     * Add a guard key to the session.
+     *
+     * @return $this
+     */
+    public function guardedBy(string $name): self;
+
+    /**
      * Retrieves the session id.
      */
     public function getId(): string;
@@ -33,6 +40,21 @@ interface SessionInterface
      * Sets a session variable.
      */
     public function set(string $key, mixed $value): void;
+
+    /**
+     * Sets the user id.
+     */
+    public function setUserId(int|string $userId): void;
+
+    /**
+     * Retrieves the user id.
+     */
+    public function getUserId(): int|string|null;
+
+    /**
+     * Removes the user id.
+     */
+    public function removeUserId(): void;
 
     /**
      * Sets a session variable that will be available only in next request.

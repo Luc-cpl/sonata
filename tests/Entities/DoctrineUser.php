@@ -11,8 +11,8 @@ use Orkestra\Entities\Attributes\Faker;
  * @property-read string $value
  */
 #[Doctrine\Entity]
-#[Doctrine\Table(name: 'subjects')]
-class DoctrineSubject extends AbstractEntity
+#[Doctrine\Table(name: 'users')]
+class DoctrineUser extends AbstractEntity
 {
     #[Doctrine\Id]
     #[Doctrine\GeneratedValue(strategy: 'AUTO')]

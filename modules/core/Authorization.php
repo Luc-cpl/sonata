@@ -65,6 +65,7 @@ class Authorization implements AuthInterface
 
         /** @var SessionInterface */
         $driver = $this->app->get($guardParams['driver']);
+        $driver = $driver->guardedBy($guardKey);
 
         $guard->setDriver($driver);
 
@@ -83,9 +84,9 @@ class Authorization implements AuthInterface
         return $guard;
     }
 
-    public function subject(): ?object
+    public function user(): ?object
     {
-        return $this->guard($this->currentGuard)->subject();
+        return $this->guard($this->currentGuard)->user();
     }
 
     public function check(): bool
@@ -93,9 +94,9 @@ class Authorization implements AuthInterface
         return $this->guard($this->currentGuard)->check();
     }
 
-    public function authenticate(object $subject)
+    public function authenticate(object $user)
     {
-        return $this->guard($this->currentGuard)->authenticate($subject);
+        return $this->guard($this->currentGuard)->authenticate($user);
     }
 
     public function revoke(): void

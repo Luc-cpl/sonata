@@ -7,7 +7,7 @@ use Sonata\Middleware\AuthorizationMiddleware;
 use Sonata\SessionProvider;
 use Sonata\Testing\Auth;
 use Sonata\Testing\Doctrine;
-use Tests\Entities\DoctrineSubject;
+use Tests\Entities\DoctrineUser;
 
 beforeEach(function () {
     app()->provider(SessionProvider::class);
@@ -29,23 +29,23 @@ afterEach(function () {
     Auth::clear();
 });
 
-it('should allow the access for a logged in subject', function () {
-    $subject = Doctrine::factory(DoctrineSubject::class)[0];
-    Auth::actingAs($subject);
+it('should allow the access for a logged in user', function () {
+    $user = Doctrine::factory(DoctrineUser::class)[0];
+    Auth::actingAs($user);
 
     $middleware = middleware(AuthorizationMiddleware::class);
     $response = $middleware->process();
     expect($response->getStatusCode())->toBe(200);
 });
 
-it('should throw an exception for a guest subject', function () {
+it('should throw an exception for a guest user', function () {
     $middleware = middleware(AuthorizationMiddleware::class);
     $middleware->process();
 })->expectException(UnauthorizedException::class);
 
-it('should allow the access for a logged in subject with a specific guard', function () {
-    $subject = Doctrine::factory(DoctrineSubject::class)[0];
-    Auth::actingAs($subject, 'web2');
+it('should allow the access for a logged in user with a specific guard', function () {
+    $user = Doctrine::factory(DoctrineUser::class)[0];
+    Auth::actingAs($user, 'web2');
 
     $middleware = middleware(AuthorizationMiddleware::class, ['guard' => 'web2']);
     $response = $middleware->process();

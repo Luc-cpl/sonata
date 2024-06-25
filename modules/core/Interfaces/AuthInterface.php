@@ -8,28 +8,28 @@ namespace Sonata\Interfaces;
 interface AuthInterface
 {
     /**
-     * Performs the authentication process for the given subject.
+     * Performs the authentication process for the given user.
      * Depending on the driver it may return some data as a result
      * to be retrieved in the request cycle.
      *
-     * @param T $subject
+     * @param T $user
      * @return mixed[]|string|void
      */
-    public function authenticate(object $subject);
+    public function authenticate(object $user);
 
     /**
-     * Checks if the subject is authenticated.
+     * Checks if the user is authenticated.
      */
     public function check(): bool;
 
     /**
-     * Retrieves the authenticated subject.
+     * Retrieves the authenticated user.
      * @return T|null
      */
-    public function subject(): ?object;
+    public function user(): ?object;
 
     /**
-     * Revokes the subject authentication.
+     * Revokes the user authentication.
      */
     public function revoke(): void;
 

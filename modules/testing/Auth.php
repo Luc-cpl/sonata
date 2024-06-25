@@ -13,17 +13,17 @@ class Auth
     private static array $usedGuards = [];
 
     /**
-     * Authenticate as the given subject for testing purposes.
+     * Authenticate as the given user for testing purposes.
      *
-     * @template TSubject of object
-     * @param TSubject $subject
+     * @template TUser of object
+     * @param TUser $user
      * @param class-string|string|null $guard
      */
-    public static function actingAs(object $subject, ?string $guard = null): void
+    public static function actingAs(object $user, ?string $guard = null): void
     {
         self::$usedGuards[] = $guard;
         self::$usedGuards = array_unique(self::$usedGuards);
-        self::guard($guard)->authenticate($subject);
+        self::guard($guard)->authenticate($user);
     }
 
     /**

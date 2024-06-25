@@ -3,30 +3,30 @@
 use Orkestra\Providers\HooksProvider;
 use Sonata\Interfaces\RepositoryInterface;
 use Sonata\Testing\Doctrine;
-use Tests\Entities\DoctrineSubject as Subject;
+use Tests\Entities\DoctrineUser as User;
 
 beforeEach(function () {
     doctrineTest();
 });
 
-it('should be able to create a subject', function () {
+it('should be able to create a user', function () {
     $repository = app()->get(RepositoryInterface::class);
 
-    $subject = factory()->make(Subject::class);
-    $repository->persist($subject);
+    $user = factory()->make(User::class);
+    $repository->persist($user);
     Doctrine::flush();
 
-    /** @var Subject */
-    $foundSubject = Doctrine::find(Subject::class, $subject->id);
+    /** @var User */
+    $foundUser = Doctrine::find(User::class, $user->id);
 
-    expect($subject->id)->toBeInt();
-    expect($foundSubject->id)->toBe($subject->id);
+    expect($user->id)->toBeInt();
+    expect($foundUser->id)->toBe($user->id);
 });
 
-it('should be able to update a subject', function () {
-    $subject = Doctrine::factory(Subject::class)[0];
+it('should be able to update a user', function () {
+    $user = Doctrine::factory(User::class)[0];
 
-    $subject->set(value: 'new value');
+    $user->set(value: 'new value');
 
     /**
      * The managed entity should be updated
@@ -34,10 +34,10 @@ it('should be able to update a subject', function () {
      */
     Doctrine::flush();
 
-    /** @var Subject */
-    $foundSubject = Doctrine::find(Subject::class, $subject->id);
+    /** @var User */
+    $foundUser = Doctrine::find(User::class, $user->id);
 
-    expect($foundSubject->value)->toBe('new value');
+    expect($foundUser->value)->toBe('new value');
 });
 
 describe('listeners', function () {
@@ -47,70 +47,70 @@ describe('listeners', function () {
 
     it('persists data on "http.router.response.before" hook', function () {
         $repository = app()->get(RepositoryInterface::class);
-        $subject = factory()->make(subject::class);
+        $user = factory()->make(user::class);
 
-        $repository->persist($subject);
+        $repository->persist($user);
 
-        expect(isset($subject->id))->toBeFalse();
+        expect(isset($user->id))->toBeFalse();
 
         app()->hookCall('http.router.response.before');
 
-        expect(isset($subject->id))->toBeTrue();
+        expect(isset($user->id))->toBeTrue();
     });
 });
 
-it('should be able to delete a subject', function () {
-    $subject = Doctrine::factory(subject::class)[0];
-    $id = $subject->id;
+it('should be able to delete a user', function () {
+    $user = Doctrine::factory(user::class)[0];
+    $id = $user->id;
 
     $repository = app()->get(RepositoryInterface::class);
-    $repository->delete($subject);
+    $repository->delete($user);
 
     Doctrine::flush();
 
     expect($id)->toBeInt();
-    expect(isset($subject->id))->toBeFalse();
-    expect(Doctrine::find(subject::class, $id))->toBeNull();
+    expect(isset($user->id))->toBeFalse();
+    expect(Doctrine::find(user::class, $id))->toBeNull();
 });
 
-it('should be able to find a subject by id', function () {
-    $subjects = Doctrine::factory(subject::class, 10);
+it('should be able to find a user by id', function () {
+    $users = Doctrine::factory(user::class, 10);
 
     $repository = app()->get(RepositoryInterface::class);
-    $foundSubjects = $repository->get($subjects[0]->id);
+    $foundUsers = $repository->get($users[0]->id);
 
-    expect($foundSubjects->id)->toBe($subjects[0]->id);
+    expect($foundUsers->id)->toBe($users[0]->id);
 });
 
-it('should be able to paginate subjects', function () {
-    $subjects = Doctrine::factory(subject::class, 10);
+it('should be able to paginate users', function () {
+    $users = Doctrine::factory(user::class, 10);
 
     $repository = app()->get(RepositoryInterface::class);
-    $foundSubjects = $repository->slice(0, 5)->getIterator();
-    $foundSubjects = iterator_to_array($foundSubjects);
-    $foundSubjects = array_map(fn ($subject) => $subject->value, $foundSubjects);
+    $foundUsers = $repository->slice(0, 5)->getIterator();
+    $foundUsers = iterator_to_array($foundUsers);
+    $foundUsers = array_map(fn ($user) => $user->value, $foundUsers);
 
-    expect(count($foundSubjects))->toBe(5);
+    expect(count($foundUsers))->toBe(5);
 
-    $subjectsEmails = array_map(fn ($subject) => $subject->value, $subjects);
-    $subjectsEmails = array_slice($subjectsEmails, 0, 5);
+    $usersEmails = array_map(fn ($user) => $user->value, $users);
+    $usersEmails = array_slice($usersEmails, 0, 5);
 
-    sort($subjectsEmails);
-    sort($foundSubjects);
+    sort($usersEmails);
+    sort($foundUsers);
 
-    expect($foundSubjects)->toBe($subjectsEmails);
+    expect($foundUsers)->toBe($usersEmails);
 });
 
-it('should be able to count subjects', function () {
-    Doctrine::factory(subject::class, 10);
+it('should be able to count users', function () {
+    Doctrine::factory(user::class, 10);
     $repository = app()->get(RepositoryInterface::class);
 
     $count = $repository->count();
     expect($count)->toBe(10);
 });
 
-it('should be able slice and count subjects', function () {
-    Doctrine::factory(subject::class, 10);
+it('should be able slice and count users', function () {
+    Doctrine::factory(user::class, 10);
     $repository = app()->get(RepositoryInterface::class);
 
     $count = count($repository->slice(0, 5)->getIterator());

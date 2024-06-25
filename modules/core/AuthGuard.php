@@ -24,7 +24,7 @@ class AuthGuard implements AuthGuardInterface
     /**
      * @var T|null
      */
-    protected ?object $subject = null;
+    protected ?object $user = null;
 
     public function setName(string $name): void
     {
@@ -44,52 +44,43 @@ class AuthGuard implements AuthGuardInterface
         $this->repository = $repository;
     }
 
-    public function authenticate(object $subject): void
+    public function authenticate(object $user): void
     {
-        /** @var string */
-        $guardKey = $this->guardKey();
-        $this->subject = $subject;
-        // @phpstan-ignore-next-line
-        $this->session->set($guardKey, $subject->id);
+        $this->user = $user;
+        $this->session->setUserId($user->id);
     }
 
     public function check(): bool
     {
         /**
-         * As in most cases we will use the subject() method in the request cycle,
-         * we can just check if the subject() method returns null or not instead of
-         * checking the database for the subject existence as only checking the session
-         * not ensures that the subject is still valid.
+         * As in most cases we will use the user() method in the request cycle,
+         * we can just check if the user() method returns null or not instead of
+         * checking the database for the user existence as only checking the session
+         * not ensures that the user is still valid.
          */
-        return $this->subject() !== null;
+        return $this->user() !== null;
     }
 
-    public function subject(): ?object
+    public function user(): ?object
     {
-        if (!$this->session->has($this->guardKey())) {
+        $userId = $this->session->getUserId();
+        if (!$userId) {
             return null;
         }
-        /** @var string */
-        $guardKey = $this->session->get($this->guardKey());
 
         /** @var T|null */
-        $subject = $this->repository->get($guardKey);
-        $this->subject ??= $subject;
-        return $this->subject;
+        $user = $this->repository->get($userId);
+        $this->user ??= $user;
+        return $this->user;
     }
 
     public function revoke(): void
     {
-        $this->session->remove($this->guardKey());
+        $this->session->removeUserId();
     }
 
     public function session(): SessionInterface
     {
         return $this->session;
-    }
-
-    protected function guardKey(): string
-    {
-        return "guards.{$this->name}.subject";
     }
 }
