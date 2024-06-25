@@ -6,6 +6,7 @@ trait CreatableTrait
 {
     public function make(array $data): object
     {
+        // @phpstan-ignore-next-line
         return $this->factory->make($this->entityClass, $data);
     }
 

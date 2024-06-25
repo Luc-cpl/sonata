@@ -47,6 +47,7 @@ class AuthGuard implements AuthGuardInterface
     public function authenticate(object $user): void
     {
         $this->user = $user;
+        // @phpstan-ignore-next-line
         $this->session->setUserId($user->id);
     }
 

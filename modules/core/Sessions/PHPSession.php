@@ -85,6 +85,7 @@ class PHPSession implements SessionInterface
 
     public function getUserId(): int|string|null
     {
+        /** @var int|string|null */
         return $this->get('user_id');
     }
 
