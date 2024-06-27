@@ -2,6 +2,7 @@
 
 use Orkestra\Providers\HooksProvider;
 use Sonata\Interfaces\SessionInterface;
+use Sonata\SessionDrivers;
 use Sonata\SessionProvider;
 
 beforeEach(function () {
@@ -11,21 +12,15 @@ beforeEach(function () {
 });
 
 it('should commit the session interface on `{app}.http.router.response.before` hook', function () {
-    session_write_close();
     app()->provider(HooksProvider::class);
-    $session = app()->get(SessionInterface::class);
+    $session = app()->get(SessionDrivers::class)->get();
     $session->start();
-    expect(app()->get(SessionInterface::class)->started())->toBeTrue();
+    expect($session->started())->toBeTrue();
 
     app()->hookCall('http.router.response.before');
 
     expect($session->started())->toBeFalse();
 });
-
-it('should throw an exception if the session implementation is not a valid class', function () {
-    app()->config()->set('sonata.session', 'InvalidClass');
-    app()->boot();
-})->throws(InvalidArgumentException::class, 'The session implementation must be a valid class');
 
 it('should throw an exception if the default guard key is not a string', function () {
     app()->config()->set('sonata.default_guard', 123);

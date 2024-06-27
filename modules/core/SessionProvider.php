@@ -31,23 +31,17 @@ class SessionProvider implements ProviderInterface
     {
         $app->config()->set('validation', [
             'sonata.default_guard' => fn ($value) => is_string($value) ? true : 'The default guard key must be a string',
-            'sonata.session'       => fn ($value) => class_exists($value) ? true : 'The session implementation must be a valid class',
             'sonata.auth_guards'   => function ($value) {
                 if (!is_array($value)) {
                     return 'The auth guards config must be an array';
                 }
-                foreach ($value as $config) {
+                foreach ($value as $key => $config) {
+                    if (!is_string($key)) {
+                        return 'The auth guard key must be a string';
+                    }
+
                     if (!is_array($config) || !array_key_exists('driver', $config) || !array_key_exists('repository', $config)) {
                         return 'The auth guard config must be an array with keys "driver" and "repository"';
-                    }
-
-                    if (!class_exists($config['driver']) && !interface_exists($config['driver'])) {
-                        return 'The guard driver must be a class or interface';
-                    }
-
-                    $driverImplementations = class_implements($config['driver']);
-                    if (!in_array(SessionInterface::class, $driverImplementations) && $config['driver'] !== SessionInterface::class) {
-                        return 'The guard driver must implement ' . SessionInterface::class;
                     }
 
                     if (!class_exists($config['repository']) && !interface_exists($config['repository'])) {
@@ -63,22 +57,14 @@ class SessionProvider implements ProviderInterface
             },
         ]);
 
-        $phpSession = PHPSession::class;
         $app->config()->set('definition', [
-            'sonata.session'       => ["Session implementation (defaults to $phpSession)", $phpSession],
             'sonata.default_guard' => ['Default guard key'],
             'sonata.auth_guards'   => ['Auth guards'],
         ]);
 
-        $app->bind(SessionInterface::class, function (App $app) {
-            /** @var class-string */
-            $class = $app->config()->get('sonata.session');
-            /** @var SessionInterface */
-            $session = $app->get($class);
-            return $session;
-        });
-
         $app->bind(AuthGuardInterface::class, AuthGuard::class);
+
+        SessionDrivers::register('default', PHPSession::class, 1440, true);
     }
 
     public function boot(App $app): void

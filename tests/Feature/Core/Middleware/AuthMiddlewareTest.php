@@ -2,7 +2,6 @@
 
 use League\Route\Http\Exception\UnauthorizedException;
 use Sonata\Interfaces\RepositoryInterface;
-use Sonata\Interfaces\SessionInterface;
 use Sonata\Middleware\AuthorizationMiddleware;
 use Sonata\SessionProvider;
 use Sonata\Testing\Auth;
@@ -14,11 +13,11 @@ beforeEach(function () {
     app()->config()->set('sonata.default_guard', 'web');
     app()->config()->set('sonata.auth_guards', [
         'web' => [
-            'driver'     => SessionInterface::class,
+            'driver'     => 'default',
             'repository' => RepositoryInterface::class,
         ],
         'web2' => [
-            'driver'     => SessionInterface::class,
+            'driver'     => 'default',
             'repository' => RepositoryInterface::class,
         ],
     ]);

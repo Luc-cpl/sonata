@@ -2,11 +2,11 @@
 
 use Doctrine\ORM\EntityManagerInterface;
 use Orkestra\Entities\EntityFactory;
-use Orkestra\Testing\AbstractTestCase;
 use Sonata\Doctrine\Repositories\AbstractRepository;
 use Sonata\Interfaces\RepositoryInterface;
 use Sonata\Testing\Doctrine;
 use Tests\Entities\DoctrineUser;
+use Tests\TestCase;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,7 +19,7 @@ use Tests\Entities\DoctrineUser;
 |
 */
 
-uses(AbstractTestCase::class)->in(__DIR__);
+uses(TestCase::class)->in(__DIR__);
 
 /*
 |--------------------------------------------------------------------------

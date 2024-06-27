@@ -12,19 +12,24 @@ interface SessionInterface
     public function guardedBy(string $name): self;
 
     /**
+     * Sets the session name.
+     */
+    public function ttl(int $ttl): void;
+
+    /**
+     * If the session should add a cookie with the session id.
+     */
+    public function useCookie(bool $use): void;
+
+    /**
      * Retrieves the session id.
      */
     public function getId(): string;
 
     /**
      * Starts the session.
-     * Should follows the PHP session_start() function signature.
-     *
-     * @see https://www.php.net/manual/en/function.session-start.php
-     * @see https://www.php.net/manual/en/session.configuration.php
-     * @param array<string, mixed> $params
      */
-    public function start(array $params = []): bool;
+    public function start(): void;
 
     /**
      * Checks if the session is started.
