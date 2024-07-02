@@ -5,7 +5,7 @@ namespace Sonata\Interfaces\Repository;
 /**
  * @template T of object
  */
-interface IdentifiableInterface
+interface IdentifiableRepositoryInterface
 {
     /**
      * @return T|null

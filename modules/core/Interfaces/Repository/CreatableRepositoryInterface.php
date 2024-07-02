@@ -6,7 +6,7 @@ namespace Sonata\Interfaces\Repository;
  * @template TEntity of object
  * @template TData of array
  */
-interface CreatableInterface
+interface CreatableRepositoryInterface
 {
     /**
      * @param TData $data

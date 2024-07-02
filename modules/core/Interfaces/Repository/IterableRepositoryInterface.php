@@ -13,7 +13,7 @@ use Traversable;
  * @template TEntity of object
  * @extends IteratorAggregate<TEntity>
  */
-interface IterableInterface extends Countable, IteratorAggregate
+interface IterableRepositoryInterface extends Countable, IteratorAggregate
 {
     /**
      * @return TCollection<array-key, TEntity>

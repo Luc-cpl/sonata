@@ -1,13 +1,13 @@
 <?php
 
-namespace Sonata\Middleware;
+namespace Sonata\Authorization\Middleware;
 
-use Orkestra\Services\Http\Middleware\AbstractMiddleware;
 use League\Route\Http\Exception\UnauthorizedException;
+use Orkestra\Services\Http\Middleware\AbstractMiddleware;
+use Sonata\Authorization\Authorization;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Sonata\Authorization;
 
 /**
  * Middleware to authorize the access to a route.
@@ -34,14 +34,14 @@ class AuthorizationMiddleware extends AbstractMiddleware
             $auth = $auth->guard($this->guard);
         }
 
-        $isLoggedIn = $auth->check();
+        $isLoggedIn = $auth->user() !== null;
 
         if ($this->guest && $isLoggedIn) {
-            throw new UnauthorizedException();
+            throw new UnauthorizedException('User is already logged in');
         }
 
         if (!$this->guest && !$isLoggedIn) {
-            throw new UnauthorizedException();
+            throw new UnauthorizedException('User is not logged in');
         }
 
         return $handler->handle($request);

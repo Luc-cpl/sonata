@@ -1,25 +1,19 @@
 <?php
 
-use Orkestra\Providers\HooksProvider;
-use Sonata\Interfaces\SessionInterface;
-use Sonata\SessionDrivers;
-use Sonata\SessionProvider;
+use Sonata\Authorization\AuthorizationProvider;
+use Tests\TestRepository;
+use Sonata\Sessions\SessionsProvider;
 
 beforeEach(function () {
-    app()->provider(SessionProvider::class);
+    app()->provider(SessionsProvider::class);
+    app()->provider(AuthorizationProvider::class);
     app()->config()->set('sonata.default_guard', 'web');
-    app()->config()->set('sonata.auth_guards', []);
-});
-
-it('should commit the session interface on `{app}.http.router.response.before` hook', function () {
-    app()->provider(HooksProvider::class);
-    $session = app()->get(SessionDrivers::class)->get();
-    $session->start();
-    expect($session->started())->toBeTrue();
-
-    app()->hookCall('http.router.response.before');
-
-    expect($session->started())->toBeFalse();
+    app()->config()->set('sonata.auth_guards', [
+        'web' => [
+            'driver' => 'php',
+            'repository' => TestRepository::class,
+        ],
+    ]);
 });
 
 it('should throw an exception if the default guard key is not a string', function () {

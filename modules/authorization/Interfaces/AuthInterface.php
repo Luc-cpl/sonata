@@ -1,6 +1,9 @@
 <?php
 
-namespace Sonata\Interfaces;
+namespace Sonata\Authorization\Interfaces;
+
+use Sonata\Interfaces\Entity\IdentifiableInterface;
+use Sonata\Sessions\Interfaces\SessionInterface;
 
 /**
  * @template T of object
@@ -15,12 +18,7 @@ interface AuthInterface
      * @param T $user
      * @return mixed[]|string|void
      */
-    public function authenticate(object $user);
-
-    /**
-     * Checks if the user is authenticated.
-     */
-    public function check(): bool;
+    public function authenticate(IdentifiableInterface $user);
 
     /**
      * Retrieves the authenticated user.
@@ -34,7 +32,7 @@ interface AuthInterface
     public function revoke(): void;
 
     /**
-     * Retrieves the used session instance.
+     * Retrieves the session instance.
      */
     public function session(): SessionInterface;
 }

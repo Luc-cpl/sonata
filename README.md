@@ -14,7 +14,7 @@ composer require luccpl/sonata
 
 ### Session Management
 
-Sonata provides a session interface that currently supports PHP's default session handling. To use it, register the `Sonata\SessionProvider` in your providers list.
+Sonata provides a session interface that currently supports PHP's default session handling. To use it, register the `Sonata\Sessions\SessionsProvider` in your providers list.
 
 ### Authentication Configuration
 

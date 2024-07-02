@@ -5,6 +5,7 @@ namespace Tests\Entities;
 use Orkestra\Entities\AbstractEntity;
 use Doctrine\ORM\Mapping as Doctrine;
 use Orkestra\Entities\Attributes\Faker;
+use Sonata\Interfaces\Entity\IdentifiableInterface;
 
 /**
  * @property-read ?int $id
@@ -12,12 +13,12 @@ use Orkestra\Entities\Attributes\Faker;
  */
 #[Doctrine\Entity]
 #[Doctrine\Table(name: 'users')]
-class DoctrineUser extends AbstractEntity
+class DoctrineUser extends AbstractEntity implements IdentifiableInterface
 {
     #[Doctrine\Id]
     #[Doctrine\GeneratedValue(strategy: 'AUTO')]
     #[Doctrine\Column(type: 'integer')]
-    protected ?int $id;
+    protected ?int $id = null;
 
     public function __construct(
         #[Doctrine\Column(type: 'string')]
@@ -25,5 +26,10 @@ class DoctrineUser extends AbstractEntity
         protected string $value
     ) {
         //
+    }
+
+    public function getId(): ?int
+    {
+        return $this->id;
     }
 }

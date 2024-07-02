@@ -1,25 +1,17 @@
 <?php
 
-namespace Sonata;
+namespace Sonata\Authorization;
 
 use Orkestra\App;
 use Orkestra\Interfaces\ProviderInterface;
-use Sonata\Interfaces\AuthGuardInterface;
-use Sonata\Interfaces\Repository\IdentifiableInterface;
-use Sonata\Interfaces\SessionInterface;
-use Sonata\Listeners\SessionCommit;
-use Sonata\Middleware\AuthorizationMiddleware;
-use Sonata\Sessions\PHPSession;
+use Sonata\Authorization\Middleware\AuthorizationMiddleware;
+use Sonata\Sessions\SessionDrivers;
+use Sonata\Authorization\Interfaces\AuthGuardInterface;
+use Sonata\Interfaces\Repository\IdentifiableRepositoryInterface;
+use InvalidArgumentException;
 
-class SessionProvider implements ProviderInterface
+class AuthorizationProvider implements ProviderInterface
 {
-    /**
-     * @var array<class-string>
-     */
-    public array $listeners = [
-        SessionCommit::class,
-    ];
-
     /**
      * @var array<class-string>
      */
@@ -49,8 +41,8 @@ class SessionProvider implements ProviderInterface
                     }
 
                     $repositoryImplementations = class_implements($config['repository']);
-                    if (!in_array(IdentifiableInterface::class, $repositoryImplementations)) {
-                        return 'The guard repository must implement ' . IdentifiableInterface::class;
+                    if (!in_array(IdentifiableRepositoryInterface::class, $repositoryImplementations)) {
+                        return 'The guard repository must implement ' . IdentifiableRepositoryInterface::class;
                     }
                 }
                 return true;
@@ -63,12 +55,17 @@ class SessionProvider implements ProviderInterface
         ]);
 
         $app->bind(AuthGuardInterface::class, AuthGuard::class);
-
-        SessionDrivers::register('default', PHPSession::class, 1440, true);
     }
 
     public function boot(App $app): void
     {
-        //
+        $guards = $app->config()->get('sonata.auth_guards');
+		foreach ($guards as $key => $config) {
+			$driver = SessionDrivers::definition($config['driver']);
+			if ($driver === null) {
+				throw new InvalidArgumentException("The session driver \"{$config['driver']}\" does not exist");
+			}
+			SessionDrivers::register($config['driver'] . '.' . $key, $driver['driver'], $driver['options']);
+		}
     }
 }

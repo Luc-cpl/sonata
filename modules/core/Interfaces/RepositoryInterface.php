@@ -2,10 +2,10 @@
 
 namespace Sonata\Interfaces;
 
-use Sonata\Interfaces\Repository\CreatableInterface;
-use Sonata\Interfaces\Repository\DeletableInterface;
-use Sonata\Interfaces\Repository\IdentifiableInterface;
-use Sonata\Interfaces\Repository\IterableInterface;
+use Sonata\Interfaces\Repository\CreatableRepositoryInterface;
+use Sonata\Interfaces\Repository\DeletableRepositoryInterface;
+use Sonata\Interfaces\Repository\IdentifiableRepositoryInterface;
+use Sonata\Interfaces\Repository\IterableRepositoryInterface;
 use Traversable;
 
 /**
@@ -14,16 +14,16 @@ use Traversable;
  * @template TCollection of Traversable
  * @template TEntity of object
  * @template TData of array
- * @extends CreatableInterface<TEntity, TData>
- * @extends DeletableInterface<TEntity>
- * @extends IdentifiableInterface<TEntity>
- * @extends IterableInterface<TCollection, TEntity>
+ * @extends CreatableRepositoryInterface<TEntity, TData>
+ * @extends DeletableRepositoryInterface<TEntity>
+ * @extends IdentifiableRepositoryInterface<TEntity>
+ * @extends IterableRepositoryInterface<TCollection, TEntity>
  */
 interface RepositoryInterface extends
-    CreatableInterface,
-    DeletableInterface,
-    IdentifiableInterface,
-    IterableInterface
+    CreatableRepositoryInterface,
+    DeletableRepositoryInterface,
+    IdentifiableRepositoryInterface,
+    IterableRepositoryInterface
 {
     //
 }

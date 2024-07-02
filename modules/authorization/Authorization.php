@@ -1,13 +1,15 @@
 <?php
 
-namespace Sonata;
+namespace Sonata\Authorization;
 
 use Orkestra\Interfaces\ConfigurationInterface;
-use Sonata\Interfaces\AuthGuardInterface;
-use Sonata\Interfaces\Repository\IdentifiableInterface;
 use Orkestra\Interfaces\AppContainerInterface;
-use Sonata\Interfaces\AuthInterface;
-use Sonata\Interfaces\SessionInterface;
+use Sonata\Interfaces\Repository\IdentifiableRepositoryInterface;
+use Sonata\Authorization\Interfaces\AuthGuardInterface;
+use Sonata\Authorization\Interfaces\AuthInterface;
+use Sonata\Sessions\SessionDrivers;
+use Sonata\Sessions\Interfaces\SessionInterface;
+use Sonata\Interfaces\Entity\IdentifiableInterface;
 use InvalidArgumentException;
 
 /**
@@ -21,6 +23,11 @@ class Authorization implements AuthInterface
      */
     private array $instances = [];
 
+    /**
+     * @var array<string, array{driver: string, repository: class-string}>
+     */
+    private array $guards;
+
     private string $defaultGuard;
 
     private string $currentGuard;
@@ -32,6 +39,8 @@ class Authorization implements AuthInterface
     ) {
         /** @var string */
         $defaultGuard = $this->config->get('sonata.default_guard');
+        /** @var array<string, array{driver: string, repository: class-string}> */
+        $this->guards = $this->config->get('sonata.auth_guards');
         $this->defaultGuard = $defaultGuard;
         $this->currentGuard = $defaultGuard;
     }
@@ -48,37 +57,35 @@ class Authorization implements AuthInterface
         $guard ??= $this->defaultGuard;
         $this->currentGuard = $guard;
 
+        $guardParams = $this->guards[$guard] ?? null;
+
+        if ($guardParams === null) {
+            throw new InvalidArgumentException("The guard \"$guard\" does not exist");
+        }
+
         if (array_key_exists($guard, $this->instances)) {
             return $this->instances[$guard];
         }
 
-        /** @var array<string, array{driver: string, repository: class-string}> */
-        $guards = $this->config->get('sonata.auth_guards');
-        if (!array_key_exists($guard, $guards)) {
-            throw new InvalidArgumentException("The guard \"$guard\" does not exist");
+        try {
+            /** @var IdentifiableRepositoryInterface<T> */
+            $repository = $this->app->get($guardParams['repository']);
+        } catch (\Exception $e) {
+            throw new InvalidArgumentException("Failed to retrieve repository for guard \"$guard\": " . $e->getMessage());
         }
 
-        $guardKey = $guard;
-        $guardParams = $guards[$guard];
-
-        /** @var AuthGuardInterface<T> */
-        $guard = $this->app->make(AuthGuardInterface::class);
-        $driver = $this->drivers->get($guardParams['driver'])->guardedBy($guardKey);
-        $guard->setDriver($driver);
-
-        /** @var IdentifiableInterface<T> */
-        $repository = $this->app->get($guardParams['repository']);
-
-        if (!$guard->session()->started()) {
-            $guard->session()->start();
+        try {
+            /** @var AuthGuardInterface<T> */
+            $this->instances[$guard] = $this->app->make(AuthGuardInterface::class, [
+                'repository' => $repository,
+                'driver' => $guardParams['driver'] . '.' . $guard,
+                'name' => $guard,
+            ]);
+        } catch (\Exception $e) {
+            throw new InvalidArgumentException("Failed to create guard \"$guard\": " . $e->getMessage());
         }
 
-        $guard->setRepository($repository);
-        $guard->setName($guardKey);
-
-        $this->instances[$guardKey] = $guard;
-
-        return $guard;
+        return $this->instances[$guard];
     }
 
     public function user(): ?object
@@ -86,12 +93,7 @@ class Authorization implements AuthInterface
         return $this->guard($this->currentGuard)->user();
     }
 
-    public function check(): bool
-    {
-        return $this->guard($this->currentGuard)->check();
-    }
-
-    public function authenticate(object $user)
+    public function authenticate(IdentifiableInterface $user)
     {
         return $this->guard($this->currentGuard)->authenticate($user);
     }

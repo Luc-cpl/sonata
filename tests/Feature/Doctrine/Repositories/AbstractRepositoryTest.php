@@ -51,11 +51,11 @@ describe('listeners', function () {
 
         $repository->persist($user);
 
-        expect(isset($user->id))->toBeFalse();
+        expect($user->id)->toBeNull();
 
         app()->hookCall('http.router.response.before');
 
-        expect(isset($user->id))->toBeTrue();
+        expect($user->id)->toBeInt();
     });
 });
 
@@ -69,7 +69,7 @@ it('should be able to delete a user', function () {
     Doctrine::flush();
 
     expect($id)->toBeInt();
-    expect(isset($user->id))->toBeFalse();
+    expect($user->id)->toBeNull();
     expect(Doctrine::find(user::class, $id))->toBeNull();
 });
 

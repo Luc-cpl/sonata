@@ -4,6 +4,8 @@
     "autoload": {
         "psr-4": {
             "Sonata\\": "modules/core",
+            "Sonata\\Sessions\\": "modules/sessions",
+            "Sonata\\Authorization\\": "modules/authorization",
             "Sonata\\Testing\\": "modules/testing",
             "Sonata\\Doctrine\\": "modules/doctrine"
         }

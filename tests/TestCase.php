@@ -11,7 +11,7 @@ abstract class TestCase extends AbstractTestCase
 		parent::setUp();
 
 		// Reset the session before each test
-		$_SESSION = [];
+		unset($_SESSION);
 		session_reset();
 		session_unset();
 		session_write_close();
