@@ -7,7 +7,7 @@ use Orkestra\Interfaces\ProviderInterface;
 use Sonata\Authorization\Middleware\AuthorizationMiddleware;
 use Sonata\Sessions\SessionDrivers;
 use Sonata\Authorization\Interfaces\AuthGuardInterface;
-use Sonata\Interfaces\Repository\IdentifiableRepositoryInterface;
+use Sonata\Repositories\Interfaces\Partials\IdentifiableRepositoryInterface;
 use InvalidArgumentException;
 
 class AuthorizationProvider implements ProviderInterface
@@ -65,7 +65,7 @@ class AuthorizationProvider implements ProviderInterface
 			if ($driver === null) {
 				throw new InvalidArgumentException("The session driver \"{$config['driver']}\" does not exist");
 			}
-			SessionDrivers::register($config['driver'] . '.' . $key, $driver['driver'], $driver['options']);
+			SessionDrivers::register($config['driver'] . '.' . $key, $driver['handler'], $driver['options']);
 		}
     }
 }

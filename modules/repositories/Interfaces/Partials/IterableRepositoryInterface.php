@@ -1,6 +1,6 @@
 <?php
 
-namespace Sonata\Interfaces\Repository;
+namespace Sonata\Repositories\Interfaces\Partials;
 
 use Countable;
 use IteratorAggregate;

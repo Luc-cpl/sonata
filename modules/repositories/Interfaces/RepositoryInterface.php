@@ -1,11 +1,11 @@
 <?php
 
-namespace Sonata\Interfaces;
+namespace Sonata\Repositories\Interfaces;
 
-use Sonata\Interfaces\Repository\CreatableRepositoryInterface;
-use Sonata\Interfaces\Repository\DeletableRepositoryInterface;
-use Sonata\Interfaces\Repository\IdentifiableRepositoryInterface;
-use Sonata\Interfaces\Repository\IterableRepositoryInterface;
+use Sonata\Repositories\Interfaces\Partials\CreatableRepositoryInterface;
+use Sonata\Repositories\Interfaces\Partials\DeletableRepositoryInterface;
+use Sonata\Repositories\Interfaces\Partials\IdentifiableRepositoryInterface;
+use Sonata\Repositories\Interfaces\Partials\IterableRepositoryInterface;
 use Traversable;
 
 /**

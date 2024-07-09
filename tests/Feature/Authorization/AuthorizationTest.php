@@ -3,8 +3,8 @@
 use Orkestra\Providers\HttpProvider;
 use Sonata\Authorization\Authorization;
 use Sonata\Authorization\AuthorizationProvider;
-use Sonata\Interfaces\Entity\IdentifiableInterface;
-use Sonata\Interfaces\Repository\IdentifiableRepositoryInterface;
+use Sonata\Entities\Interfaces\IdentifiableInterface;
+use Sonata\Repositories\Interfaces\Partials\IdentifiableRepositoryInterface;
 use Sonata\Sessions\Interfaces\SessionInterface;
 use Sonata\Sessions\SessionDrivers;
 use Sonata\Sessions\SessionsProvider;

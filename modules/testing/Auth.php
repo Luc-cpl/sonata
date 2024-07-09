@@ -4,7 +4,7 @@ namespace Sonata\Testing;
 
 use Sonata\Authorization\Authorization;
 use Sonata\Authorization\Interfaces\AuthInterface;
-use Sonata\Interfaces\Entity\IdentifiableInterface;
+use Sonata\Entities\Interfaces\IdentifiableInterface;
 
 class Auth
 {

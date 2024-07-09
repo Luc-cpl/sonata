@@ -2,7 +2,7 @@
 
 namespace Sonata\Authorization\Interfaces;
 
-use Sonata\Interfaces\Entity\IdentifiableInterface;
+use Sonata\Entities\Interfaces\IdentifiableInterface;
 use Sonata\Sessions\Interfaces\SessionInterface;
 
 /**

@@ -2,7 +2,7 @@
 
 namespace Tests;
 
-use Sonata\Interfaces\RepositoryInterface;
+use Sonata\Repositories\Interfaces\RepositoryInterface;
 use ArrayIterator;
 use Traversable;
 

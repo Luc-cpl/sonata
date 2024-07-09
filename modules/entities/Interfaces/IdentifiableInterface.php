@@ -1,6 +1,6 @@
 <?php
 
-namespace Sonata\Interfaces\Entity;
+namespace Sonata\Entities\Interfaces;
 
 interface IdentifiableInterface
 {

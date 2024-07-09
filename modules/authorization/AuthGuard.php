@@ -3,8 +3,8 @@
 namespace Sonata\Authorization;
 
 use Sonata\Authorization\Interfaces\AuthGuardInterface;
-use Sonata\Interfaces\Entity\IdentifiableInterface;
-use Sonata\Interfaces\Repository\IdentifiableRepositoryInterface;
+use Sonata\Entities\Interfaces\IdentifiableInterface;
+use Sonata\Repositories\Interfaces\Partials\IdentifiableRepositoryInterface;
 use Sonata\Sessions\Interfaces\SessionInterface;
 use Sonata\Sessions\SessionDrivers;
 

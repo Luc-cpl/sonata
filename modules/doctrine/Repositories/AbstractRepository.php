@@ -7,7 +7,7 @@ use Sonata\Doctrine\Repositories\Traits\CreatableTrait;
 use Sonata\Doctrine\Repositories\Traits\DeletableTrait;
 use Sonata\Doctrine\Repositories\Traits\IdentifiableTrait;
 use Sonata\Doctrine\Repositories\Traits\IterableTrait;
-use Sonata\Interfaces\RepositoryInterface;
+use Sonata\Repositories\Interfaces\RepositoryInterface;
 
 /**
  * @template TEntity of object

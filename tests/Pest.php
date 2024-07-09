@@ -3,7 +3,7 @@
 use Doctrine\ORM\EntityManagerInterface;
 use Orkestra\Entities\EntityFactory;
 use Sonata\Doctrine\Repositories\AbstractRepository;
-use Sonata\Interfaces\RepositoryInterface;
+use Sonata\Repositories\Interfaces\RepositoryInterface;
 use Sonata\Testing\Doctrine;
 use Tests\Entities\DoctrineUser;
 use Tests\TestCase;

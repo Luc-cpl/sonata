@@ -13,7 +13,7 @@ use SessionHandlerInterface;
 class SessionDrivers
 {
 	/**
-	 * @var array<string, array{driver: class-string, options: array, instance: SessionHandlerInterface|null, id: string}>
+	 * @var array<string, array{handler: class-string, options: array, instance: SessionHandlerInterface|null, id: string}>
 	 */
     private static array $sessions = [];
 
@@ -54,9 +54,9 @@ class SessionDrivers
 
 		unset($_SESSION);
 		/** @var SessionHandlerInterface */
-		$driver = $this->app->get(self::$sessions[$key]['driver']);
+		$handler = $this->app->get(self::$sessions[$key]['handler']);
 
-		session_set_save_handler($driver, true);
+		session_set_save_handler($handler, true);
 
 		if (!isset(self::$sessions[$key]['id'])) {
 			self::$sessions[$key]['id'] = session_create_id($key);
@@ -66,7 +66,7 @@ class SessionDrivers
 		$this->start($sessionName, self::$sessions[$key]['options']);
 
 		self::$sessions[$key]['id'] = session_id();
-		self::$sessions[$key]['instance'] = $driver;
+		self::$sessions[$key]['instance'] = $handler;
 
 		$this->current = $name;
 	}
@@ -116,13 +116,13 @@ class SessionDrivers
 	 * Register a session driver.
 	 * 
 	 * @see https://www.php.net/manual/function.session-start.php
-	 * @param class-string $driver The class name of the session driver.
+	 * @param class-string $handler The handler class of the session driver.
 	 * @param mixed[] $options The options to pass to the session driver.
 	 */
-	public static function register(string $name, string $driver, array $options = []): void
+	public static function register(string $name, string $handler, array $options = []): void
 	{
 		self::$sessions[self::hashName($name)] = [
-			'driver' => $driver,
+			'handler' => $handler,
 			'options' => $options
 		];
 	}
@@ -131,7 +131,7 @@ class SessionDrivers
 	 * Get a session driver definition.
 	 * 
 	 * @param string $name The name of the session driver.
-	 * @return ?array{driver: class-string, options: mixed[]} The session driver definition.
+	 * @return ?array{handler: class-string, options: mixed[]} The session driver definition.
 	 */
 	public static function definition(string $name): ?array
 	{

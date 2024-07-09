@@ -5,7 +5,7 @@ namespace Tests\Entities;
 use Orkestra\Entities\AbstractEntity;
 use Doctrine\ORM\Mapping as Doctrine;
 use Orkestra\Entities\Attributes\Faker;
-use Sonata\Interfaces\Entity\IdentifiableInterface;
+use Sonata\Entities\Interfaces\IdentifiableInterface;
 
 /**
  * @property-read ?int $id

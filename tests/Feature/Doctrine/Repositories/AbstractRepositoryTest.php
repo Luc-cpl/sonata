@@ -1,7 +1,7 @@
 <?php
 
 use Orkestra\Providers\HooksProvider;
-use Sonata\Interfaces\RepositoryInterface;
+use Sonata\Repositories\Interfaces\RepositoryInterface;
 use Sonata\Testing\Doctrine;
 use Tests\Entities\DoctrineUser as User;
 

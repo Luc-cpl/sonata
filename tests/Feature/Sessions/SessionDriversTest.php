@@ -102,12 +102,12 @@ it('should get the session definition', function() {
 	$testDefinition = SessionDrivers::definition('test');
 
 	expect($phpDefinition)->toBe([
-		'driver' => SessionHandler::class,
+		'handler' => SessionHandler::class,
 		'options' => [],
 	]);
 
 	expect($testDefinition)->toBe([
-		'driver' => SessionHandler::class,
+		'handler' => SessionHandler::class,
 		'options' => ['use_cookies' => false ],
 	]);
 
@@ -119,7 +119,7 @@ it('should get the session definition', function() {
 
 	$phpDefinition = SessionDrivers::definition('php');
 	expect($phpDefinition)->toBe([
-		'driver' => SessionHandler::class,
+		'handler' => SessionHandler::class,
 		'options' => [],
 	]);
 });

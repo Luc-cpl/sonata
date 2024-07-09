@@ -4,12 +4,12 @@ namespace Sonata\Authorization;
 
 use Orkestra\Interfaces\ConfigurationInterface;
 use Orkestra\Interfaces\AppContainerInterface;
-use Sonata\Interfaces\Repository\IdentifiableRepositoryInterface;
+use Sonata\Repositories\Interfaces\Partials\IdentifiableRepositoryInterface;
 use Sonata\Authorization\Interfaces\AuthGuardInterface;
 use Sonata\Authorization\Interfaces\AuthInterface;
 use Sonata\Sessions\SessionDrivers;
 use Sonata\Sessions\Interfaces\SessionInterface;
-use Sonata\Interfaces\Entity\IdentifiableInterface;
+use Sonata\Entities\Interfaces\IdentifiableInterface;
 use InvalidArgumentException;
 
 /**
