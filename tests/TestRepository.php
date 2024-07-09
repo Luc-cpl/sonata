@@ -58,8 +58,12 @@ class TestRepository implements RepositoryInterface
         $this->data[$entity->id] = $entity;
     }
 
-    public function delete(object $entity): void
+    public function delete(object $entity = null): void
     {
+        if ($entity === null) {
+            $this->data = [];
+            return;
+        }
         // @phpstan-ignore-next-line
         unset($this->data[$entity->id]);
     }

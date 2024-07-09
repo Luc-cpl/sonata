@@ -8,7 +8,7 @@ namespace Sonata\Repositories\Interfaces\Partials;
 interface DeletableRepositoryInterface
 {
     /**
-     * @param T $object
+     * @param ?T $object
      */
-    public function delete(object $object): void;
+    public function delete(?object $object = null): void;
 }

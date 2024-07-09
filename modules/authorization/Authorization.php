@@ -30,7 +30,7 @@ class Authorization implements AuthInterface
 
     private string $defaultGuard;
 
-    private string $currentGuard;
+    private ?string $currentGuard = null;
 
     public function __construct(
         private ConfigurationInterface $config,
@@ -42,7 +42,16 @@ class Authorization implements AuthInterface
         /** @var array<string, array{driver: string, repository: class-string}> */
         $this->guards = $this->config->get('sonata.auth_guards');
         $this->defaultGuard = $defaultGuard;
-        $this->currentGuard = $defaultGuard;
+    }
+
+    public function getActiveGuardName(): ?string
+    {
+        return $this->currentGuard;
+    }
+
+    public function getGuardOptions(string $guard): array
+    {
+        return $this->guards[$guard] ?? [];
     }
 
     /**
@@ -57,9 +66,9 @@ class Authorization implements AuthInterface
         $guard ??= $this->defaultGuard;
         $this->currentGuard = $guard;
 
-        $guardParams = $this->guards[$guard] ?? null;
+        $guardParams = $this->getGuardOptions($guard);
 
-        if ($guardParams === null) {
+        if (empty($guardParams)) {
             throw new InvalidArgumentException("The guard \"$guard\" does not exist");
         }
 
@@ -78,7 +87,7 @@ class Authorization implements AuthInterface
             /** @var AuthGuardInterface<T> */
             $this->instances[$guard] = $this->app->make(AuthGuardInterface::class, [
                 'repository' => $repository,
-                'driver' => $guardParams['driver'] . '.' . $guard,
+                'driver' => $guardParams['driver'],
                 'name' => $guard,
             ]);
         } catch (\Exception $e) {

@@ -60,12 +60,15 @@ class AuthorizationProvider implements ProviderInterface
     public function boot(App $app): void
     {
         $guards = $app->config()->get('sonata.auth_guards');
-		foreach ($guards as $key => $config) {
+		foreach ($guards as $key => &$config) {
 			$driver = SessionDrivers::definition($config['driver']);
 			if ($driver === null) {
 				throw new InvalidArgumentException("The session driver \"{$config['driver']}\" does not exist");
 			}
-			SessionDrivers::register($config['driver'] . '.' . $key, $driver['handler'], $driver['options']);
+            $config['driver'] = $config['driver'] . '.' . $key;
+			SessionDrivers::register($config['driver'], $driver['handler'], $driver['options']);
 		}
+
+        $app->config()->set('sonata.auth_guards', $guards);
     }
 }
