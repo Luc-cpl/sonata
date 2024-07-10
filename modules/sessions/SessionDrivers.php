@@ -21,7 +21,7 @@ class SessionDrivers
 
 	public function __construct(
 		private App $app,
-		private ServerRequestInterface $request,
+		private ?ServerRequestInterface $request = null,
 	) {
 		$this->initialize();
 	}
@@ -73,6 +73,10 @@ class SessionDrivers
 
 	private function initialize(): void
 	{
+		if ($this->request === null) {
+			return;
+		}
+
 		$authHeader = $this->request->getHeader('Authorization')[0] ?? '';
 		if (str_starts_with($authHeader, 'Bearer ')) {
 			$auth = substr($authHeader, 7);

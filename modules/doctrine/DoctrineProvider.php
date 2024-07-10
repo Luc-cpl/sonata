@@ -43,7 +43,7 @@ class DoctrineProvider implements ProviderInterface
 
         $app->config()->set('definition', [
             'doctrine.migrations' => ['Doctrine migrations namespace and directories (defaults to ["App\Migrations" => "./migrations"])', fn () => ['App\Migrations' => $app->config()->get('root') . '/migrations']],
-            'doctrine.entities'   => ['Doctrine entities directories (defaults to ["app/Entities"])', fn () => [$app->config()->get('root') . '/app/Entities']],
+            'doctrine.entities'   => ['Doctrine entities directories (defaults to ["app/Entities"])', ['app/Entities']],
             'doctrine.connection' => ['Doctrine configuration (defaults to sqlite)', fn () => [
                 'driver' => 'pdo_sqlite',
                 'path'   => $app->config()->get('root') . '/db.sqlite',
@@ -57,13 +57,11 @@ class DoctrineProvider implements ProviderInterface
             return $cli;
         });
 
-        $app->bind(EntityManagerInterface::class, function (App $app) {
+        $app->bind(EntityManagerInterface::class, function (App $app, EntityRegistry $entityRegistry) {
             /** @var string */
             $env = $app->config()->get('env');
 
-            /** @var string[] */
-            $entitiesPaths = $app->config()->get('doctrine.entities');
-
+            $entitiesPaths = $entityRegistry->getEntities();
             foreach ($entitiesPaths as &$path) {
                 if (class_exists($path)) {
                     $filename = (new ReflectionClass($path))->getFileName();
@@ -105,6 +103,10 @@ class DoctrineProvider implements ProviderInterface
 
     public function boot(App $app): void
     {
-        //
+        /** @var string[] */
+        $entities = $app->config()->get('doctrine.entities');
+        foreach ($entities as $entity) {
+            EntityRegistry::register($entity);
+        }
     }
 }

@@ -2,18 +2,14 @@
 
 namespace Sonata\Doctrine\Repositories\Traits;
 
-use Doctrine\ORM\QueryBuilder;
+use Traversable;
 
 trait DeletableTrait
 {
-    protected QueryBuilder $builder;
+    abstract public function getIterator(): Traversable;
 
-    public function delete(object $object = null): void
+    public function delete(object $object): void
     {
-        if ($object === null) {
-            $this->builder->delete()->getQuery()->execute();
-            return;
-        }
         $this->manager->remove($object);
     }
 }

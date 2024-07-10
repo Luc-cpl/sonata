@@ -5,7 +5,9 @@ namespace Tests\Entities;
 use Orkestra\Entities\AbstractEntity;
 use Doctrine\ORM\Mapping as Doctrine;
 use Orkestra\Entities\Attributes\Faker;
+use Orkestra\Entities\Attributes\Repository;
 use Sonata\Entities\Interfaces\IdentifiableInterface;
+use Sonata\Repositories\Interfaces\RepositoryInterface;
 
 /**
  * @property-read ?int $id
@@ -13,6 +15,7 @@ use Sonata\Entities\Interfaces\IdentifiableInterface;
  */
 #[Doctrine\Entity]
 #[Doctrine\Table(name: 'users')]
+#[Repository(RepositoryInterface::class)]
 class DoctrineUser extends AbstractEntity implements IdentifiableInterface
 {
     #[Doctrine\Id]
