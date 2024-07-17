@@ -13,22 +13,22 @@ use Doctrine\ORM\Mapping\PreUpdate;
  */
 trait HasTimeStampsTrait
 {
-	#[Column(type: 'datetime')]
+	#[Column(name: 'created_at', type: 'datetime')]
 	protected \DateTimeInterface $createdAt;
 
-	#[Column(type: 'datetime')]
+	#[Column(name: 'updated_at', type: 'datetime')]
 	protected \DateTimeInterface $updatedAt;
 
 	#[PrePersist]
 	public function setCreatedAtValue(): void
 	{
-		$this->created_at = new \DateTimeImmutable();
+		$this->$createdAt = new \DateTimeImmutable();
 		$this->setUpdatedAtValue();
 	}
 
 	#[PreUpdate]
 	public function setUpdatedAtValue(): void
 	{
-		$this->updated_at = new \DateTimeImmutable();
+		$this->$updatedAt = new \DateTimeImmutable();
 	}
 }
