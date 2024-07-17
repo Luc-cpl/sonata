@@ -81,4 +81,14 @@ class Doctrine
         $manager->flush();
         return $entities;
     }
+
+    /**
+     * Remove an entity from the database.
+     */
+    public static function remove(object $entity): void
+    {
+        $manager = app()->get(EntityManagerInterface::class);
+        $manager->remove($entity);
+        $manager->flush();
+    }
 }
