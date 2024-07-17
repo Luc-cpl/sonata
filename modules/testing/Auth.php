@@ -2,8 +2,9 @@
 
 namespace Sonata\Testing;
 
-use Sonata\Authorization;
-use Sonata\Interfaces\AuthInterface;
+use Sonata\Authorization\Authorization;
+use Sonata\Authorization\Interfaces\AuthInterface;
+use Sonata\Entities\Interfaces\IdentifiableInterface;
 
 class Auth
 {
@@ -19,7 +20,7 @@ class Auth
      * @param TUser $user
      * @param class-string|string|null $guard
      */
-    public static function actingAs(object $user, ?string $guard = null): void
+    public static function actingAs(IdentifiableInterface $user, ?string $guard = null): void
     {
         self::$usedGuards[] = $guard;
         self::$usedGuards = array_unique(self::$usedGuards);

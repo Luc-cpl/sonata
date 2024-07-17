@@ -3,7 +3,10 @@
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "Sonata\\": "modules/core",
+            "Sonata\\Entities\\": "modules/entities",
+            "Sonata\\Repositories\\": "modules/repositories",
+            "Sonata\\Sessions\\": "modules/sessions",
+            "Sonata\\Authorization\\": "modules/authorization",
             "Sonata\\Testing\\": "modules/testing",
             "Sonata\\Doctrine\\": "modules/doctrine"
         }
