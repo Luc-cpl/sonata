@@ -5,6 +5,8 @@ namespace Sonata\Doctrine\Entities\Traits;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\PrePersist;
 use Doctrine\ORM\Mapping\PreUpdate;
+use DateTimeInterface;
+use DateTime;
 
 /**
  * Trait to add created_at and updated_at fields to an entity.
@@ -14,21 +16,21 @@ use Doctrine\ORM\Mapping\PreUpdate;
 trait HasTimeStampsTrait
 {
 	#[Column(name: 'created_at', type: 'datetime')]
-	protected \DateTimeInterface $createdAt;
+	protected DateTimeInterface $createdAt;
 
 	#[Column(name: 'updated_at', type: 'datetime')]
-	protected \DateTimeInterface $updatedAt;
+	protected DateTimeInterface $updatedAt;
 
 	#[PrePersist]
 	public function setCreatedAtValue(): void
 	{
-		$this->$createdAt = new \DateTimeImmutable();
+		$this->$createdAt = new DateTime();
 		$this->setUpdatedAtValue();
 	}
 
 	#[PreUpdate]
 	public function setUpdatedAtValue(): void
 	{
-		$this->$updatedAt = new \DateTimeImmutable();
+		$this->$updatedAt = new DateTime();
 	}
 }
