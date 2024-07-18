@@ -2,6 +2,8 @@
 
 namespace Sonata\Testing;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Sonata\Doctrine\DoctrineProvider;
 use Doctrine\DBAL\LockMode;
 use Doctrine\ORM\EntityManagerInterface;
@@ -60,13 +62,16 @@ class Doctrine
     /**
      * Factory method to create entities.
      * Useful for creating entities in tests.
+ /**
+     * Factory method to create entities.
+     * Useful for creating entities in tests.
      *
      * @template T of object
      * @param class-string<T> $className
-     * @param mixed[] $args
-     * @return T[]
+     * @param mixed[]|callable $args
+     * @return Collection<T>
      */
-    public static function factory(string $className, int $number = 1, array $args = []): array
+    public static function factory(string $className, int $number = 1, array|callable $args = []): Collection
     {
         $manager = app()->get(EntityManagerInterface::class);
         $factory = factory();
@@ -79,7 +84,7 @@ class Doctrine
         }
 
         $manager->flush();
-        return $entities;
+        return new ArrayCollection($entities);
     }
 
     /**

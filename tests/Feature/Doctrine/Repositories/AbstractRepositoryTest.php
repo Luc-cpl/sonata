@@ -92,7 +92,7 @@ it('should be able to paginate users', function () {
 
     expect(count($foundUsers))->toBe(5);
 
-    $usersEmails = array_map(fn ($user) => $user->value, $users);
+    $usersEmails = $users->map(fn ($user) => $user->value)->toArray();
     $usersEmails = array_slice($usersEmails, 0, 5);
 
     sort($usersEmails);
