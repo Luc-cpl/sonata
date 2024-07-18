@@ -62,9 +62,6 @@ class Doctrine
     /**
      * Factory method to create entities.
      * Useful for creating entities in tests.
- /**
-     * Factory method to create entities.
-     * Useful for creating entities in tests.
      *
      * @template T of object
      * @param class-string<T> $className
