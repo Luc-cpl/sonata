@@ -18,7 +18,7 @@ trait IterableTrait
     public function first(): ?object
     {
         // @phpstan-ignore-next-line
-        return $this->builder->getQuery()->getOneOrNullResult();
+        return $this->slice(0, 1)->builder->getQuery()->getOneOrNullResult();
     }
 
     public function count(): int
