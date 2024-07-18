@@ -73,6 +73,7 @@ class Doctrine
      */
     public static function factory(string $className, int $number = 1, array|callable $args = []): Collection
     {
+        $args = is_callable($args) ? [$args] : $args;
         $manager = app()->get(EntityManagerInterface::class);
         $factory = factory();
         $entities = [];
