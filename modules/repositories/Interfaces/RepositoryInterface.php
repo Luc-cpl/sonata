@@ -11,13 +11,12 @@ use Traversable;
 /**
  * A base interface for repositories.
  *
- * @template TCollection of Traversable
  * @template TEntity of object
  * @template TData of array
  * @extends CreatableRepositoryInterface<TEntity, TData>
  * @extends DeletableRepositoryInterface<TEntity>
  * @extends IdentifiableRepositoryInterface<TEntity>
- * @extends IterableRepositoryInterface<TCollection, TEntity>
+ * @extends IterableRepositoryInterface<TEntity>
  */
 interface RepositoryInterface extends
     CreatableRepositoryInterface,

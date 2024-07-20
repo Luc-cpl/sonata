@@ -7,13 +7,12 @@ use Orkestra\Interfaces\AppContainerInterface;
 use Sonata\Repositories\Interfaces\Partials\IdentifiableRepositoryInterface;
 use Sonata\Authorization\Interfaces\AuthGuardInterface;
 use Sonata\Authorization\Interfaces\AuthInterface;
-use Sonata\Sessions\SessionDrivers;
 use Sonata\Sessions\Interfaces\SessionInterface;
 use Sonata\Entities\Interfaces\IdentifiableInterface;
 use InvalidArgumentException;
 
 /**
- * @template T of object
+ * @template T of IdentifiableInterface
  * @implements AuthInterface<T>
  */
 class Authorization implements AuthInterface
@@ -34,13 +33,13 @@ class Authorization implements AuthInterface
 
     public function __construct(
         private ConfigurationInterface $config,
-        private SessionDrivers $drivers,
         private AppContainerInterface $app
     ) {
         /** @var string */
         $defaultGuard = $this->config->get('sonata.default_guard');
         /** @var array<string, array{driver: string, repository: class-string}> */
-        $this->guards = $this->config->get('sonata.auth_guards');
+        $guards = $this->config->get('sonata.auth_guards');
+        $this->guards = $guards;
         $this->defaultGuard = $defaultGuard;
     }
 
@@ -49,6 +48,11 @@ class Authorization implements AuthInterface
         return $this->currentGuard;
     }
 
+    /**
+     * Retrieves the options for the given guard.
+     *
+     * @return array{driver: string, repository: class-string}|array{}
+     */
     public function getGuardOptions(string $guard): array
     {
         return $this->guards[$guard] ?? [];
@@ -85,11 +89,12 @@ class Authorization implements AuthInterface
 
         try {
             /** @var AuthGuardInterface<T> */
-            $this->instances[$guard] = $this->app->make(AuthGuardInterface::class, [
+            $instance = $this->app->make(AuthGuardInterface::class, [
                 'repository' => $repository,
                 'driver' => $guardParams['driver'],
                 'name' => $guard,
             ]);
+            $this->instances[$guard] = $instance;
         } catch (\Exception $e) {
             throw new InvalidArgumentException("Failed to create guard \"$guard\": " . $e->getMessage());
         }

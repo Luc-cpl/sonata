@@ -2,23 +2,20 @@
 
 namespace Sonata\Repositories\Interfaces\Partials;
 
+use Doctrine\Common\Collections\Collection;
 use Countable;
-use IteratorAggregate;
-use Traversable;
 
 /**
  * A base interface for repositories that can be iterated.
  *
- * @template TCollection of Traversable
  * @template TEntity of object
- * @extends IteratorAggregate<TEntity>
  */
-interface IterableRepositoryInterface extends Countable, IteratorAggregate
+interface IterableRepositoryInterface extends Countable
 {
     /**
-     * @return TCollection<array-key, TEntity>
+     * @return Collection<array-key, TEntity>
      */
-    public function getIterator(): Traversable;
+    public function getIterator(): Collection;
 
     /**
      * @return TEntity|null

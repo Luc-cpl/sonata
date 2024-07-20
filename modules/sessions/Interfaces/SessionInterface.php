@@ -4,7 +4,7 @@ namespace Sonata\Sessions\Interfaces;
 
 interface SessionInterface
 {
-	public function id(): string;
+	public function id(): string|false;
 
 	public function get(string $key): mixed;
 

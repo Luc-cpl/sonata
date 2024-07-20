@@ -30,7 +30,9 @@ class EntityRegistry
 	 */
 	public function getEntities(): array
 	{
-		$root = rtrim($this->config->get('root'), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+		/** @var string */
+		$root = $this->config->get('root');
+		$root = rtrim($root, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
 		return array_map(
 			fn (string $entity): string => class_exists($entity)
 				? $entity

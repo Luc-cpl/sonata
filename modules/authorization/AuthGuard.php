@@ -9,7 +9,7 @@ use Sonata\Sessions\Interfaces\SessionInterface;
 use Sonata\Sessions\SessionDrivers;
 
 /**
- * @template T of object
+ * @template T of IdentifiableInterface
  * @implements AuthGuardInterface<T>
  */
 class AuthGuard implements AuthGuardInterface
@@ -20,7 +20,7 @@ class AuthGuard implements AuthGuardInterface
     private ?object $user = null;
 
     /**
-     * @param IdentifiableRepositoryInterface<T>
+     * @param IdentifiableRepositoryInterface<T> $repository
      */
     public function __construct(
         private IdentifiableRepositoryInterface $repository,
@@ -37,6 +37,9 @@ class AuthGuard implements AuthGuardInterface
         return $this->name;
     }
 
+    /**
+     * @param T $user
+     */
     public function authenticate(IdentifiableInterface $user): void
     {
         $this->user = $user;

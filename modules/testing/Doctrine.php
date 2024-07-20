@@ -66,7 +66,7 @@ class Doctrine
      * @template T of object
      * @param class-string<T> $className
      * @param mixed[]|callable $args
-     * @return Collection<T>
+     * @return Collection<int, T>
      */
     public static function factory(string $className, int $number = 1, array|callable $args = []): Collection
     {

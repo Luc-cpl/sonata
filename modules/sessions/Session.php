@@ -6,7 +6,7 @@ use Sonata\Sessions\Interfaces\SessionInterface;
 
 class Session implements SessionInterface
 {
-	public function id(): string
+	public function id(): string|false
 	{
 		return session_id();
 	}

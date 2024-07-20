@@ -2,19 +2,21 @@
 
 namespace Sonata\Sessions\Interfaces;
 
-use DateTime;
 use Sonata\Repositories\Interfaces\Partials\CreatableRepositoryInterface;
 use Sonata\Repositories\Interfaces\Partials\DeletableRepositoryInterface;
 use Sonata\Repositories\Interfaces\Partials\IdentifiableRepositoryInterface;
 use Sonata\Repositories\Interfaces\Partials\IterableRepositoryInterface;
 use Sonata\Sessions\Entities\Session;
+use DateTime;
 
 /**
- * @template T of Session
- * @extends IdentifiableRepositoryInterface<T>
- * @extends CreatableRepositoryInterface<T>
- * @extends DeletableRepositoryInterface<T>
- * @extends IterableRepositoryInterface<T>
+ * @extends IdentifiableRepositoryInterface<Session>
+ * @extends CreatableRepositoryInterface<Session, array{
+ * 	id: string,
+ * 	driver: string,
+ * }>
+ * @extends DeletableRepositoryInterface<Session>
+ * @extends IterableRepositoryInterface<Session>
  */
 interface SessionRepositoryInterface extends
 	IdentifiableRepositoryInterface,

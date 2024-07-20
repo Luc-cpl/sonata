@@ -4,9 +4,16 @@ namespace Sonata\Sessions\Repositories;
 
 use Sonata\Doctrine\Repositories\AbstractRepository;
 use Sonata\Sessions\Interfaces\SessionRepositoryInterface;
+use Doctrine\Common\Collections\Collection;
 use Sonata\Sessions\Entities\Session;
 use DateTime;
 
+/**
+ * @extends AbstractRepository<Session, array{
+ * 	id: string,
+ * 	driver: string,
+ * }>
+ */
 class DoctrineSessionRepository extends AbstractRepository implements SessionRepositoryInterface
 {
 	protected string $entityClass = Session::class;

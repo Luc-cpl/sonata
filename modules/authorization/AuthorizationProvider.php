@@ -59,6 +59,7 @@ class AuthorizationProvider implements ProviderInterface
 
     public function boot(App $app): void
     {
+        /** @var array<string, array{driver: string, repository: class-string}> */
         $guards = $app->config()->get('sonata.auth_guards');
 		foreach ($guards as $key => &$config) {
 			$driver = SessionDrivers::definition($config['driver']);

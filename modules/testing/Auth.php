@@ -16,7 +16,7 @@ class Auth
     /**
      * Authenticate as the given user for testing purposes.
      *
-     * @template TUser of object
+     * @template TUser of IdentifiableInterface
      * @param TUser $user
      * @param class-string|string|null $guard
      */
@@ -30,7 +30,7 @@ class Auth
     /**
      * Retrieve the guard instance for the given guard key.
      *
-     * @return AuthInterface<object>
+     * @return AuthInterface<IdentifiableInterface>
      */
     public static function guard(?string $guard = null): AuthInterface
     {

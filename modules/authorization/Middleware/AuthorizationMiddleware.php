@@ -8,11 +8,12 @@ use Sonata\Authorization\Authorization;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Sonata\Entities\Interfaces\IdentifiableInterface;
 
 /**
  * Middleware to authorize the access to a route.
  *
- * @template T of object
+ * @template T of IdentifiableInterface
  */
 class AuthorizationMiddleware extends AbstractMiddleware
 {

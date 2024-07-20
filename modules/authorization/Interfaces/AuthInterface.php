@@ -6,7 +6,7 @@ use Sonata\Entities\Interfaces\IdentifiableInterface;
 use Sonata\Sessions\Interfaces\SessionInterface;
 
 /**
- * @template T of object
+ * @template T of IdentifiableInterface
  */
 interface AuthInterface
 {

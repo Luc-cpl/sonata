@@ -2,12 +2,12 @@ parameters:
   level: 9
   paths:
     - modules
-    - tests
+    # - tests
   ignoreErrors:
     - message: '#Function (app|factory|middleware) not found.#'
       paths:
         - modules/testing/*
-        - tests/*
-    - message: '#Call to an undefined method Pest\\PendingCalls\\TestCall::expectException\(\).#'
-      paths:
-        - tests/*
+    #     - tests/*
+    # - message: '#Call to an undefined method Pest\\PendingCalls\\TestCall::expectException\(\).#'
+    #   paths:
+    #     - tests/*

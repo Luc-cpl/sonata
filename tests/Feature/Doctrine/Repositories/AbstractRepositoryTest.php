@@ -1,5 +1,6 @@
 <?php
 
+use Doctrine\Common\Collections\Collection;
 use Orkestra\Providers\HooksProvider;
 use Sonata\Repositories\Interfaces\RepositoryInterface;
 use Sonata\Testing\Doctrine;
@@ -24,7 +25,7 @@ it('should be able to create a user', function () {
 });
 
 it('should be able to update a user', function () {
-    $user = Doctrine::factory(User::class)[0];
+    $user = Doctrine::factory(User::class)->first();
 
     $user->set(value: 'new value');
 
@@ -60,7 +61,7 @@ describe('listeners', function () {
 });
 
 it('should be able to delete a user', function () {
-    $user = Doctrine::factory(user::class)[0];
+    $user = Doctrine::factory(User::class)[0];
     $id = $user->id;
 
     $repository = app()->get(RepositoryInterface::class);
@@ -74,7 +75,7 @@ it('should be able to delete a user', function () {
 });
 
 it('should be able to find a user by id', function () {
-    $users = Doctrine::factory(user::class, 10);
+    $users = Doctrine::factory(User::class, 10);
 
     $repository = app()->get(RepositoryInterface::class);
     $foundUsers = $repository->get($users[0]->id);
@@ -83,7 +84,7 @@ it('should be able to find a user by id', function () {
 });
 
 it('should be able to paginate users', function () {
-    $users = Doctrine::factory(user::class, 10);
+    $users = Doctrine::factory(User::class, 10);
 
     $repository = app()->get(RepositoryInterface::class);
     $foundUsers = $repository->slice(0, 5)->getIterator();
@@ -102,7 +103,7 @@ it('should be able to paginate users', function () {
 });
 
 it('should be able to count users', function () {
-    Doctrine::factory(user::class, 10);
+    Doctrine::factory(User::class, 10);
     $repository = app()->get(RepositoryInterface::class);
 
     $count = $repository->count();
@@ -110,13 +111,14 @@ it('should be able to count users', function () {
 });
 
 it('should be able slice and count users', function () {
-    Doctrine::factory(user::class, 10);
+    Doctrine::factory(User::class, 10);
+    /** @var RepositoryInterface<Collection, User> */
     $repository = app()->get(RepositoryInterface::class);
 
-    $count = count($repository->slice(0, 5)->getIterator());
+    $count = count($repository->slice(0, 5)->getIterator()->toArray());
     expect($count)->toBe(5);
 
-    $count = count($repository->slice(8, 5)->getIterator());
+    $count = count($repository->slice(8, 5)->getIterator()->toArray());
     expect($count)->toBe(2);
 
     $count = $repository->slice(0, 5)->count();

@@ -13,7 +13,7 @@ use SessionHandlerInterface;
 class SessionDrivers
 {
 	/**
-	 * @var array<string, array{handler: class-string, options: array, instance: SessionHandlerInterface|null, id: string}>
+	 * @var array<string, array{handler: class-string, options: mixed[], instance?: SessionHandlerInterface|null, id?: string|false}>
 	 */
     private static array $sessions = [];
 
@@ -58,11 +58,13 @@ class SessionDrivers
 
 		session_set_save_handler($handler, true);
 
-		if (!isset(self::$sessions[$key]['id'])) {
-			self::$sessions[$key]['id'] = session_create_id($key);
+		$id = self::$sessions[$key]['id'] ?? null;
+
+		if (!$id) {
+			$id = session_create_id($key);
 		}
 
-		session_id(self::$sessions[$key]['id']);
+		session_id($id ? $id : null);
 		$this->start($sessionName, self::$sessions[$key]['options']);
 
 		self::$sessions[$key]['id'] = session_id();
@@ -80,7 +82,7 @@ class SessionDrivers
 		$authHeader = $this->request->getHeader('Authorization')[0] ?? '';
 		if (str_starts_with($authHeader, 'Bearer ')) {
 			$auth = substr($authHeader, 7);
-			$length = strlen(array_key_first(self::$sessions));
+			$length = strlen(array_key_first(self::$sessions) ?? '');
 			$key = substr($auth, 0, $length);
 			$session = self::$sessions[$key] ?? ['options' => []];
 			if (($session['options']['use_only_cookies'] ?? true) === false) {
@@ -98,6 +100,9 @@ class SessionDrivers
 		}
 	}
 
+	/**
+	 * @param mixed[] $options
+	 */
 	private function start(string $sessionName, array $options): void
 	{
 		$defaultOptions = [
@@ -120,11 +125,12 @@ class SessionDrivers
 	 * Register a session driver.
 	 * 
 	 * @see https://www.php.net/manual/function.session-start.php
-	 * @param class-string $handler The handler class of the session driver.
+	 * @param class-string|string $handler The handler class of the session driver.
 	 * @param mixed[] $options The options to pass to the session driver.
 	 */
 	public static function register(string $name, string $handler, array $options = []): void
 	{
+		/** @var class-string $handler */
 		self::$sessions[self::hashName($name)] = [
 			'handler' => $handler,
 			'options' => $options

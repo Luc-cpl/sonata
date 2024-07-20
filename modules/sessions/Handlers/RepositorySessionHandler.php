@@ -84,7 +84,7 @@ class RepositorySessionHandler implements SessionHandlerInterface
 		$guardName = $this->authorization?->getActiveGuardName() ?? '';
 		$guardOptions = $this->authorization?->getGuardOptions($guardName) ?? [];
 
-		if ($guardOptions['driver'] ?? '' === $this->drivers->current()) {
+		if ($this->authorization && ($guardOptions['driver'] ?? '') === $this->drivers->current()) {
 			$session->set(userId: $this->authorization->user()?->getId());
 		}
 

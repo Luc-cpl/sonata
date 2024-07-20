@@ -3,12 +3,12 @@
 namespace Sonata\Doctrine\Repositories\Traits;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\AbstractQuery;
-use Traversable;
 
 trait IterableTrait
 {
-    public function getIterator(): Traversable
+    public function getIterator(): Collection
     {
         $result = $this->builder->getQuery()->getResult();
         // @phpstan-ignore-next-line

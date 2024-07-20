@@ -3,8 +3,9 @@
 namespace Tests;
 
 use Sonata\Repositories\Interfaces\RepositoryInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use ArrayIterator;
-use Traversable;
 
 /**
  * A simple dummy repository implementation to be used in the tests.
@@ -68,9 +69,9 @@ class TestRepository implements RepositoryInterface
         unset($this->data[$entity->id]);
     }
 
-    public function getIterator(): Traversable
+    public function getIterator(): Collection
     {
-        return new ArrayIterator($this->data);
+        return new ArrayCollection($this->data);
     }
 
     public function count(): int
