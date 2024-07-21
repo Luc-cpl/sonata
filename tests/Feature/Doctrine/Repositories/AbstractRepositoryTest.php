@@ -85,6 +85,33 @@ it('should be able to find a user by id', function () {
     expect($foundUsers->id)->toBe($user->id);
 });
 
+it('should be able to find multiple users by id', function () {
+    $repository = app()->get(RepositoryInterface::class);
+    $users = Doctrine::factory(User::class, 10);
+    /** @var User */
+    $user = $users[0];
+    /** @var User */
+    $user2 = $users[6];
+
+    $foundUsers = $repository->whereId($user->id)->getIterator()->toArray();
+    expect($foundUsers)->toBe([$user]);
+
+    $foundUsers = $repository->whereId($user->id)->first();
+    expect($foundUsers)->toBe($user);
+
+    $foundUsers = $repository->whereId([$user->id, 'invalid'])->getIterator()->toArray();
+    expect($foundUsers)->toBe([$user]);
+
+    $foundUsers = $repository->whereId('invalid')->getIterator()->toArray();
+    expect($foundUsers)->toBe([]);
+
+    $foundUsers = $repository->whereId([$user->id, $user2->id])->getIterator()->toArray();
+    expect($foundUsers)->toBe([$user, $user2]);
+
+    $foundUsers = $repository->whereId([$user->id, $user2->id])->first();
+    expect($foundUsers)->toBe($user);
+});
+
 it('should be able to paginate users', function () {
     $users = Doctrine::factory(User::class, 10);
 

@@ -21,16 +21,36 @@ trait HasTimeStampsTrait
 	#[Column(name: 'updated_at', type: 'datetime')]
 	protected DateTimeInterface $updatedAt;
 
+	private bool $useCreateHook = true;
+
+	private bool $useUpdateHook = true;
+
+	public function setCreatedAt(DateTimeInterface $createdAt): void
+	{
+		$this->createdAt = $createdAt;
+		$this->useCreateHook = false;
+	}
+
+	public function setUpdatedAt(DateTimeInterface $updatedAt): void
+	{
+		$this->updatedAt = $updatedAt;
+		$this->useUpdateHook = false;
+	}
+
 	#[PrePersist]
 	public function setCreatedAtValue(): void
 	{
-		$this->createdAt = new DateTime();
 		$this->setUpdatedAtValue();
+		if ($this->useCreateHook) {
+			$this->createdAt = new DateTime();
+		}
 	}
 
 	#[PreUpdate]
 	public function setUpdatedAtValue(): void
 	{
-		$this->updatedAt = new DateTime();
+		if ($this->useUpdateHook) {
+			$this->updatedAt = new DateTime();
+		}
 	}
 }

@@ -90,7 +90,6 @@ class RepositorySessionHandler implements SessionHandlerInterface
 
 		$session->set(
 			data: $data,
-			updatedAt: new DateTime(),
 			ip: $this->request?->getServerParams()['REMOTE_ADDR'] ?? '',
 			userAgent: $this->request?->getServerParams()['HTTP_USER_AGENT'] ?? '',
 		);

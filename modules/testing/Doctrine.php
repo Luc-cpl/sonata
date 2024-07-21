@@ -72,13 +72,10 @@ class Doctrine
     {
         $args = is_callable($args) ? [$args] : $args;
         $manager = app()->get(EntityManagerInterface::class);
-        $factory = factory();
-        $entities = [];
-
-        for ($i = 0; $i < $number; $i++) {
-            $entity = $factory->make($className, ...$args);
+        $entities = factory()->times($number)->make($className, ...$args);
+        $entities = is_array($entities) ? $entities : [$entities];
+        foreach ($entities as $entity) {
             $manager->persist($entity);
-            $entities[] = $entity;
         }
 
         $manager->flush();

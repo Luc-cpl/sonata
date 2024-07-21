@@ -5,14 +5,16 @@ namespace Sonata\Sessions\Entities;
 use Orkestra\Entities\AbstractEntity;
 use Doctrine\ORM\Mapping as Doctrine;
 use Orkestra\Entities\Attributes\Faker;
-use DateTime;
 use Orkestra\Entities\Attributes\Repository;
 use Sonata\Sessions\Repositories\DoctrineSessionRepository;
+use DateTime;
+use Sonata\Doctrine\Entities\Traits\HasTimeStampsTrait;
 
 /**
  * @property-read int|string $id
  * @property-read string $data
  * @property-read string $driver
+ * @property-read DateTime $createdAt
  * @property-read DateTime $updatedAt
  * @property-read ?string $ip
  * @property-read ?string $userAgent
@@ -20,9 +22,12 @@ use Sonata\Sessions\Repositories\DoctrineSessionRepository;
  */
  #[Doctrine\Entity]
  #[Doctrine\Table(name: 'sessions')]
+ #[Doctrine\HasLifecycleCallbacks]
  #[Repository(DoctrineSessionRepository::class)]
 class Session extends AbstractEntity
 {
+	use HasTimeStampsTrait;
+
 	public function __construct(
 		#[Doctrine\Id]
 		#[Doctrine\GeneratedValue(strategy: 'NONE')]
@@ -48,10 +53,6 @@ class Session extends AbstractEntity
 
 		#[Doctrine\Column(type: 'string', nullable: true)]
 		protected string|int|null $userId = null,
-
-		#[Doctrine\Column(type: 'datetime')]
-		#[Faker(method: 'dateTimeThisYear')]
-		protected ?DateTime $updatedAt = null,
 	) {
 		//
 	}
