@@ -1,10 +1,9 @@
 <?php
 
-use Doctrine\Common\Collections\Collection;
 use Orkestra\Providers\HooksProvider;
 use Sonata\Repositories\Interfaces\RepositoryInterface;
-use Sonata\Testing\Doctrine;
 use Tests\Entities\DoctrineUser as User;
+use Sonata\Testing\Doctrine;
 
 beforeEach(function () {
     doctrineTest();
@@ -25,7 +24,8 @@ it('should be able to create a user', function () {
 });
 
 it('should be able to update a user', function () {
-    $user = Doctrine::factory(User::class)->first();
+    /** @var User */
+    $user = Doctrine::factory(User::class)[0];
 
     $user->set(value: 'new value');
 
@@ -61,6 +61,7 @@ describe('listeners', function () {
 });
 
 it('should be able to delete a user', function () {
+    /** @var User */
     $user = Doctrine::factory(User::class)[0];
     $id = $user->id;
 
@@ -76,11 +77,12 @@ it('should be able to delete a user', function () {
 
 it('should be able to find a user by id', function () {
     $users = Doctrine::factory(User::class, 10);
+    /** @var User */
+    $user = $users[0];
 
     $repository = app()->get(RepositoryInterface::class);
-    $foundUsers = $repository->get($users[0]->id);
-
-    expect($foundUsers->id)->toBe($users[0]->id);
+    $foundUsers = $repository->get($user->id);
+    expect($foundUsers->id)->toBe($user->id);
 });
 
 it('should be able to paginate users', function () {
@@ -112,7 +114,7 @@ it('should be able to count users', function () {
 
 it('should be able slice and count users', function () {
     Doctrine::factory(User::class, 10);
-    /** @var RepositoryInterface<Collection, User> */
+    /** @var RepositoryInterface<User, mixed[]> */
     $repository = app()->get(RepositoryInterface::class);
 
     $count = count($repository->slice(0, 5)->getIterator()->toArray());

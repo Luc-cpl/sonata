@@ -33,6 +33,7 @@ afterEach(function () {
 });
 
 it('should allow the access for a logged in user', function () {
+    /** @var DoctrineUser */
     $user = Doctrine::factory(DoctrineUser::class)[0];
     Auth::actingAs($user);
 
@@ -47,6 +48,7 @@ it('should throw an exception for a guest user', function () {
 })->expectException(UnauthorizedException::class);
 
 it('should allow the access for a logged in user with a specific guard', function () {
+    /** @var DoctrineUser */
     $user = Doctrine::factory(DoctrineUser::class)[0];
     Auth::actingAs($user, 'web2');
 
@@ -63,6 +65,7 @@ it('should allow access for guest access', function () {
     $response = $middleware->process();
     expect($response->getStatusCode())->toBe(200);
 
+    /** @var DoctrineUser */
     $user = Doctrine::factory(DoctrineUser::class)[0];
     Auth::actingAs($user);
 

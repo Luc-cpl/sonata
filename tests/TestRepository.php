@@ -5,12 +5,11 @@ namespace Tests;
 use Sonata\Repositories\Interfaces\RepositoryInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use ArrayIterator;
 
 /**
  * A simple dummy repository implementation to be used in the tests.
  *
- * @implements RepositoryInterface<ArrayIterator, object, array{id:string,mixed}>
+ * @implements RepositoryInterface<object, array{id:string,mixed}>
  */
 class TestRepository implements RepositoryInterface
 {
