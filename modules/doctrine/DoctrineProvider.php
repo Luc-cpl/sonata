@@ -38,12 +38,14 @@ class DoctrineProvider implements ProviderInterface
         $app->config()->set('validation', [
             'doctrine.migrations' => fn ($value) => is_array($value) ? true : 'The migrations config must be an array',
             'doctrine.entities'   => fn ($value) => is_array($value) ? true : 'The entities config must be an array',
+            'doctrine.prefix'     => fn ($value) => is_string($value) ? true : 'The prefix config must be a string',
             'doctrine.connection' => fn ($value) => is_array($value) ? true : 'The connection config must be an array',
         ]);
 
         $app->config()->set('definition', [
             'doctrine.migrations' => ['Doctrine migrations namespace and directories (defaults to ["App\Migrations" => "./migrations"])', fn () => ['App\Migrations' => $app->config()->get('root') . '/migrations']],
             'doctrine.entities'   => ['Doctrine entities directories (defaults to ["app/Entities"])', ['app/Entities']],
+            'doctrine.prefix'     => ['Doctrine table prefix (defaults to empty string)', ''],
             'doctrine.connection' => ['Doctrine configuration (defaults to sqlite)', fn () => [
                 'driver' => 'pdo_sqlite',
                 'path'   => $app->config()->get('root') . '/db.sqlite',
@@ -79,6 +81,10 @@ class DoctrineProvider implements ProviderInterface
 
             // @phpstan-ignore-next-line
             $connection = DriverManager::getConnection($connectionConfig, $config);
+
+            $connection->getConfiguration()->setSchemaAssetsFilter(function (string $tableName) use ($app) {
+                return str_starts_with($tableName, $app->config()->get('doctrine.prefix'));
+            });
 
             return new EntityManager($connection, $config);
         });
