@@ -2,10 +2,12 @@
 
 namespace Sonata\Doctrine;
 
+use Doctrine\Common\EventManager;
 use Orkestra\App;
 use Orkestra\Interfaces\ProviderInterface;
 use Orkestra\Interfaces\ConfigurationInterface;
 use Sonata\Doctrine\Listeners\FlushDoctrineData;
+use Sonata\Doctrine\DoctrineListeners\TablePlaceholders;
 use Symfony\Component\Console\Application;
 use Doctrine\Migrations\Tools\Console\ConsoleRunner as MigrationsConsoleRunner;
 use Doctrine\Migrations\Configuration\EntityManager\EntityManagerLoader;
@@ -22,6 +24,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\ORMSetup;
 use Doctrine\DBAL\DriverManager;
+use Doctrine\ORM\Events;
 use ReflectionClass;
 
 class DoctrineProvider implements ProviderInterface
@@ -36,21 +39,25 @@ class DoctrineProvider implements ProviderInterface
     public function register(App $app): void
     {
         $app->config()->set('validation', [
-            'doctrine.migrations' => fn ($value) => is_array($value) ? true : 'The migrations config must be an array',
-            'doctrine.entities'   => fn ($value) => is_array($value) ? true : 'The entities config must be an array',
-            'doctrine.prefix'     => fn ($value) => is_string($value) ? true : 'The prefix config must be a string',
-            'doctrine.connection' => fn ($value) => is_array($value) ? true : 'The connection config must be an array',
+            'doctrine.migrations'         => fn ($value) => is_array($value) ? true : 'The migrations config must be an array',
+            'doctrine.entities'           => fn ($value) => is_array($value) ? true : 'The entities config must be an array',
+            'doctrine.prefix'             => fn ($value) => is_string($value) ? true : 'The prefix config must be a string',
+            'doctrine.table.placeholders' => fn ($value) => is_array($value) ? true : 'The table placeholders config must be an array',
+            'doctrine.connection'         => fn ($value) => is_array($value) ? true : 'The connection config must be an array',
         ]);
 
         $app->config()->set('definition', [
-            'doctrine.migrations' => ['Doctrine migrations namespace and directories (defaults to ["App\Migrations" => "./migrations"])', fn () => ['App\Migrations' => $app->config()->get('root') . '/migrations']],
-            'doctrine.entities'   => ['Doctrine entities directories (defaults to ["app/Entities"])', ['app/Entities']],
-            'doctrine.prefix'     => ['Doctrine table prefix (defaults to empty string)', ''],
-            'doctrine.connection' => ['Doctrine configuration (defaults to sqlite)', fn () => [
+            'doctrine.migrations'         => ['Doctrine migrations namespace and directories (defaults to ["App\Migrations" => "./migrations"])', fn () => ['App\Migrations' => $app->config()->get('root') . '/migrations']],
+            'doctrine.entities'           => ['Doctrine entities directories (defaults to ["app/Entities"])', ['app/Entities']],
+            'doctrine.prefix'             => ['Doctrine table prefix (defaults to empty string)', ''],
+            'doctrine.table.placeholders' => ['Doctrine table placeholders (defaults to empty array)', []],
+            'doctrine.connection'         => ['Doctrine configuration (defaults to sqlite)', fn () => [
                 'driver' => 'pdo_sqlite',
                 'path'   => $app->config()->get('root') . '/db.sqlite',
             ]],
         ]);
+
+        ListenersRegistry::register(Events::loadClassMetadata, TablePlaceholders::class);
 
         $app->decorate(Application::class, function (Application $cli, App $app) {
             $app->call(ConsoleRunner::class . '::addCommands', [$cli]);
@@ -59,7 +66,7 @@ class DoctrineProvider implements ProviderInterface
             return $cli;
         });
 
-        $app->bind(EntityManagerInterface::class, function (App $app, EntityRegistry $entityRegistry) {
+        $app->bind(EntityManagerInterface::class, function (App $app, EntityRegistry $entityRegistry, ListenersRegistry $listenersRegistry) {
             /** @var string */
             $env = $app->config()->get('env');
 
@@ -86,7 +93,14 @@ class DoctrineProvider implements ProviderInterface
                 return str_starts_with($tableName, $app->config()->get('doctrine.prefix'));
             });
 
-            return new EntityManager($connection, $config);
+            $evm = new EventManager();
+
+            $listeners = $listenersRegistry->getListeners();
+            foreach ($listeners as $event => $listener) {
+                $evm->addEventListener($event, $app->get($listener));
+            }
+
+            return new EntityManager($connection, $config, $evm);
         });
 
         $app->bind(EntityManagerProvider::class, SingleManagerProvider::class);
