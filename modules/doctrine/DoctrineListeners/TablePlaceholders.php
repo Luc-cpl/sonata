@@ -49,7 +49,7 @@ class TablePlaceholders
             if (is_callable($replacement)) {
                 $replacement = $this->app->call($replacement);
             }
-            $name = str_replace("\{$placeholder\}", $replacement, $name);
+            $name = str_replace('{' . $placeholder . '}', $replacement, $name);
         }
         return $name;
     }
