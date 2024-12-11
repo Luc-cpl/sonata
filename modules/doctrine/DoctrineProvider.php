@@ -67,7 +67,7 @@ class DoctrineProvider implements ProviderInterface
         });
 
         $app->bind(TablePlaceholders::class, TablePlaceholders::class)->constructor(
-            placeholders: $app->config()->get('doctrine.table.placeholders'),
+            placeholders: fn () => $app->config()->get('doctrine.table.placeholders'),
         );
 
         $app->bind(EntityManagerInterface::class, function (App $app, EntityRegistry $entityRegistry, ListenersRegistry $listenersRegistry) {
