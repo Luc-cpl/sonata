@@ -2,8 +2,8 @@
 
 namespace Sonata\Doctrine;
 
-use Doctrine\Common\EventManager;
 use Orkestra\App;
+use Doctrine\Common\EventManager;
 use Orkestra\Interfaces\ProviderInterface;
 use Orkestra\Interfaces\ConfigurationInterface;
 use Sonata\Doctrine\Listeners\FlushDoctrineData;
@@ -24,6 +24,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\ORMSetup;
 use Doctrine\DBAL\DriverManager;
+use Doctrine\Migrations\Metadata\Storage\TableMetadataStorageConfiguration;
 use Doctrine\ORM\Events;
 use ReflectionClass;
 
@@ -60,8 +61,18 @@ class DoctrineProvider implements ProviderInterface
         ListenersRegistry::register(Events::loadClassMetadata, TablePlaceholders::class);
 
         $app->decorate(Application::class, function (Application $cli, App $app) {
+            $prefix = $app->config()->get('doctrine.prefix');
+
             $app->call(ConsoleRunner::class . '::addCommands', [$cli]);
+
+            /** @var DependencyFactory */
             $dependencyFactory = $app->call(DependencyFactory::class . '::fromEntityManager');
+
+            /** @var TableMetadataStorageConfiguration */
+            $metadataConfig = $dependencyFactory->getConfiguration()->getMetadataStorageConfiguration();
+            $tableName      = $metadataConfig->getTableName();
+            $metadataConfig->setTableName($prefix . $tableName);
+
             $app->call(MigrationsConsoleRunner::class . '::addCommands', [$cli, $dependencyFactory]);
             return $cli;
         });
