@@ -121,17 +121,19 @@ class DoctrineProvider implements ProviderInterface
         $app->bind(EntityManagerProvider::class, SingleManagerProvider::class);
         $app->bind(ConnectionProvider::class, ConnectionFromManagerProvider::class);
         $app->bind(EntityManagerLoader::class, ExistingEntityManager::class);
-        $app->bind(ConfigurationLoader::class, function (ConfigurationInterface $config) {
+        $app->bind(ConfigurationLoader::class, function (App $app, ConfigurationInterface $config) {
+            /** @var string */
+            $prefix = $app->config()->get('doctrine.prefix');
             return new ConfigurationArray([
                 'table_storage' => [
-                    'table_name' => 'migrations',
+                    'table_name' => $prefix . 'migrations',
                     'version_column_name' => 'version',
                     'version_column_length' => 191,
                     'executed_at_column_name' => 'executed_at',
                     'execution_time_column_name' => 'execution_time',
                 ],
                 'migrations_paths' => $config->get('doctrine.migrations'),
-                'all_or_nothing' => true,
+                'all_or_nothing' => false,
             ]);
         });
     }
