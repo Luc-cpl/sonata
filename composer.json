@@ -1,6 +1,7 @@
 {
     "name": "luccpl/sonata",
     "license": "MIT",
+    "version": "0.1.0",
     "autoload": {
         "psr-4": {
             "Sonata\\Entities\\": "modules/entities",
@@ -33,7 +34,7 @@
         "phpstan": "vendor/bin/phpstan analyse"
     },
     "require": {
-        "luccpl/orkestra": "dev-release/1.1.0",
+        "luccpl/orkestra": "^1.1",
         "doctrine/collections": "^2.2"
     },
     "require-dev": {

@@ -105,14 +105,18 @@ class DoctrineProvider implements ProviderInterface
             $connection = DriverManager::getConnection($connectionConfig, $config);
 
             $connection->getConfiguration()->setSchemaAssetsFilter(function (string $tableName) use ($app) {
-                return str_starts_with($tableName, $app->config()->get('doctrine.prefix'));
+                /** @var string */
+                $prefix = $app->config()->get('doctrine.prefix');
+                return str_starts_with($tableName, $prefix);
             });
 
             $evm = new EventManager();
 
             $listeners = $listenersRegistry->getListeners();
             foreach ($listeners as $event => $listener) {
-                $evm->addEventListener($event, $app->get($listener));
+                /** @var class-string $listener */
+                $obj = $app->get($listener);
+                $evm->addEventListener($event, $obj);
             }
 
             return new EntityManager($connection, $config, $evm);

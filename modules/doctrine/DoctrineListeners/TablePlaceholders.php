@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping\ClassMetadata;
 class TablePlaceholders
 {
     /**
-     * @var array<string,string|callable> The list of placeholders to be used in table names.
+     * @param array<string,string|callable> $placeholders The list of placeholders to be used in table names.
      */
     public function __construct(
         private App $app,
@@ -18,9 +18,9 @@ class TablePlaceholders
         //
     }
 
-    public function loadClassMetadata(LoadClassMetadataEventArgs $eventArgs)
+    public function loadClassMetadata(LoadClassMetadataEventArgs $eventArgs): void
     {
-        /** @var ClassMetadata */
+        /** @var ClassMetadata<object> */
         $classMetadata = $eventArgs->getClassMetadata();
 
         if (!$classMetadata instanceof ClassMetadata) {
@@ -35,10 +35,12 @@ class TablePlaceholders
         }
 
         foreach ($classMetadata->getAssociationMappings() as $fieldName => $mapping) {
-            if (isset($mapping['joinTable']) && isset($mapping['joinTable']['name'])) {
+            if (isset($mapping['joinTable']) && is_array($mapping['joinTable']) && isset($mapping['joinTable']['name'])) {
                 $name = $mapping['joinTable']['name'];
                 $name = $this->applyPlaceholders($name);
-                $classMetadata->associationMappings[$fieldName]['joinTable']['name'] = $name;
+                /** @var array<string,array{joinTable?:array{name?:string}}> $associationMappings */
+                $associationMappings = &$classMetadata->associationMappings;
+                $associationMappings[$fieldName]['joinTable']['name'] = $name;
             }
         }
     }
@@ -49,6 +51,7 @@ class TablePlaceholders
             if (is_callable($replacement)) {
                 $replacement = $this->app->call($replacement);
             }
+            /** @var string $replacement */
             $name = str_replace('{' . $placeholder . '}', $replacement, $name);
         }
         return $name;

@@ -2,8 +2,6 @@
 
 namespace Sonata\Doctrine;
 
-use Orkestra\Interfaces\ConfigurationInterface;
-
 /**
  * Class ListenersRegistry
  *
@@ -16,12 +14,6 @@ class ListenersRegistry
 	 * @var array<string|class-string> The list of registered listeners.
 	 */
 	private static array $listeners = [];
-
-	public function __construct(
-		private ConfigurationInterface $config
-	) {
-		//
-	}
 
 	/**
 	 * Retrieves the list of registered listeners.
