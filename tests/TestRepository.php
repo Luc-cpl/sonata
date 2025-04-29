@@ -36,7 +36,7 @@ class TestRepository implements RepositoryInterface
     {
         $clone = clone $this;
         // @phpstan-ignore-next-line
-        $clone->data = array_filter($this->data, fn($entity) => in_array($entity->id, (array) $id));
+        $clone->data = array_filter($this->data, fn ($entity) => in_array($entity->id, (array) $id));
         return $clone;
     }
 
