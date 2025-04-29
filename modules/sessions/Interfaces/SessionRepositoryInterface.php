@@ -19,32 +19,32 @@ use DateTime;
  * @extends IterableRepositoryInterface<Session>
  */
 interface SessionRepositoryInterface extends
-	IdentifiableRepositoryInterface,
-	CreatableRepositoryInterface,
-	DeletableRepositoryInterface,
-	IterableRepositoryInterface
+    IdentifiableRepositoryInterface,
+    CreatableRepositoryInterface,
+    DeletableRepositoryInterface,
+    IterableRepositoryInterface
 {
-	/**
-	 * Filter the repository to only include sessions
-	 * were last updated happened before the given date.
-	 *
-	 * @return $this
-	 */
-	public function updatedBefore(DateTime $date): self;
+    /**
+     * Filter the repository to only include sessions
+     * were last updated happened before the given date.
+     *
+     * @return $this
+     */
+    public function updatedBefore(DateTime $date): self;
 
-	/**
-	 * Filter the repository to only include sessions
-	 * with the given driver name.
-	 *
-	 * @return $this
-	 */
-	public function whereDriver(string $driver): self;
+    /**
+     * Filter the repository to only include sessions
+     * with the given driver name.
+     *
+     * @return $this
+     */
+    public function whereDriver(string $driver): self;
 
-	/**
-	 * Filter the repository to only include sessions
-	 * with the given user ID.
-	 *
-	 * @return $this
-	 */
-	public function whereUserId(int|string $userId): self;
+    /**
+     * Filter the repository to only include sessions
+     * with the given user ID.
+     *
+     * @return $this
+     */
+    public function whereUserId(int|string $userId): self;
 }

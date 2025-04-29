@@ -101,6 +101,10 @@ class DoctrineProvider implements ProviderInterface
                 isDevMode: $env === 'development',
             );
 
+            // Set our custom entity listener resolver
+            $entityListenerResolver = $app->get(EntityListenerResolver::class);
+            $config->setEntityListenerResolver($entityListenerResolver);
+
             // @phpstan-ignore-next-line
             $connection = DriverManager::getConnection($connectionConfig, $config);
 

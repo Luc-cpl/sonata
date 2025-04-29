@@ -6,7 +6,6 @@ use Sonata\Repositories\Interfaces\Partials\CreatableRepositoryInterface;
 use Sonata\Repositories\Interfaces\Partials\DeletableRepositoryInterface;
 use Sonata\Repositories\Interfaces\Partials\IdentifiableRepositoryInterface;
 use Sonata\Repositories\Interfaces\Partials\IterableRepositoryInterface;
-use Traversable;
 
 /**
  * A base interface for repositories.

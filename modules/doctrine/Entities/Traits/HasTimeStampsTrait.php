@@ -15,42 +15,42 @@ use DateTime;
  */
 trait HasTimeStampsTrait
 {
-	#[Column(name: 'created_at', type: 'datetime')]
-	protected DateTimeInterface $createdAt;
+    #[Column(name: 'created_at', type: 'datetime')]
+    protected DateTimeInterface $createdAt;
 
-	#[Column(name: 'updated_at', type: 'datetime')]
-	protected DateTimeInterface $updatedAt;
+    #[Column(name: 'updated_at', type: 'datetime')]
+    protected DateTimeInterface $updatedAt;
 
-	private bool $useCreateHook = true;
+    private bool $useCreateHook = true;
 
-	private bool $useUpdateHook = true;
+    private bool $useUpdateHook = true;
 
-	public function setCreatedAt(DateTimeInterface $createdAt): void
-	{
-		$this->createdAt = $createdAt;
-		$this->useCreateHook = false;
-	}
+    public function setCreatedAt(DateTimeInterface $createdAt): void
+    {
+        $this->createdAt = $createdAt;
+        $this->useCreateHook = false;
+    }
 
-	public function setUpdatedAt(DateTimeInterface $updatedAt): void
-	{
-		$this->updatedAt = $updatedAt;
-		$this->useUpdateHook = false;
-	}
+    public function setUpdatedAt(DateTimeInterface $updatedAt): void
+    {
+        $this->updatedAt = $updatedAt;
+        $this->useUpdateHook = false;
+    }
 
-	#[PrePersist]
-	public function setCreatedAtValue(): void
-	{
-		$this->setUpdatedAtValue();
-		if ($this->useCreateHook) {
-			$this->createdAt = new DateTime();
-		}
-	}
+    #[PrePersist]
+    public function setCreatedAtValue(): void
+    {
+        $this->setUpdatedAtValue();
+        if ($this->useCreateHook) {
+            $this->createdAt = new DateTime();
+        }
+    }
 
-	#[PreUpdate]
-	public function setUpdatedAtValue(): void
-	{
-		if ($this->useUpdateHook) {
-			$this->updatedAt = new DateTime();
-		}
-	}
+    #[PreUpdate]
+    public function setUpdatedAtValue(): void
+    {
+        if ($this->useUpdateHook) {
+            $this->updatedAt = new DateTime();
+        }
+    }
 }
