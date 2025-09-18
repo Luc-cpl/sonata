@@ -20,6 +20,7 @@ use Doctrine\ORM\Tools\Console\ConsoleRunner;
 use Doctrine\ORM\Tools\Console\EntityManagerProvider;
 use Doctrine\ORM\Tools\Console\EntityManagerProvider\ConnectionFromManagerProvider;
 use Doctrine\ORM\Tools\Console\EntityManagerProvider\SingleManagerProvider;
+use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\ORMSetup;
@@ -81,7 +82,7 @@ class DoctrineProvider implements ProviderInterface
             placeholders: fn () => $app->config()->get('doctrine.table.placeholders'),
         );
 
-        $app->bind(EntityManagerInterface::class, function (App $app, EntityRegistry $entityRegistry, ListenersRegistry $listenersRegistry) {
+        $app->bind(Configuration::class, function (App $app, EntityRegistry $entityRegistry, EntityListenerResolver $entityListenerResolver) {
             /** @var string */
             $env = $app->config()->get('env');
 
@@ -93,17 +94,18 @@ class DoctrineProvider implements ProviderInterface
                 }
             }
 
-            /** @var array<string, mixed> */
-            $connectionConfig = $app->config()->get('doctrine.connection');
-
             $config = ORMSetup::createAttributeMetadataConfiguration(
                 paths: $entitiesPaths,
                 isDevMode: $env === 'development',
             );
 
-            // Set our custom entity listener resolver
-            $entityListenerResolver = $app->get(EntityListenerResolver::class);
             $config->setEntityListenerResolver($entityListenerResolver);
+            return $config;
+        });
+
+        $app->bind(EntityManagerInterface::class, function (App $app, ListenersRegistry $listenersRegistry, Configuration $config) {
+            /** @var array<string, mixed> */
+            $connectionConfig = $app->config()->get('doctrine.connection');
 
             // @phpstan-ignore-next-line
             $connection = DriverManager::getConnection($connectionConfig, $config);
